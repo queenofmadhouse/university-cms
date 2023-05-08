@@ -12,10 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Builder
-@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder
 @Getter
 @Setter
 @Entity
@@ -25,5 +24,4 @@ public class Student extends User {
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
-
 }

@@ -10,10 +10,9 @@ import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-@Builder
-@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder
 @Entity
 @Table(name = "teachers", schema = "university")
 @PrimaryKeyJoinColumn(name = "user_id")
