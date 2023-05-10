@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "users", schema = "university")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User {
+abstract class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
