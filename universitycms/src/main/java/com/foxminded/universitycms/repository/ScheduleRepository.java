@@ -12,13 +12,11 @@ import java.util.List;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
-    public List<Schedule> findAllByGroupAndLessonStartAndLessonEnd(
+    public List<Schedule> findAllByGroupAndLessonStartBetween(
             Group group, LocalDateTime lessonStart, LocalDateTime lessonEnd);
 
-    public List<Schedule> findAllByTeacherAndLessonStartAndLessonEnd(
+    public List<Schedule> findAllByTeacherAndLessonStartBetween(
             Teacher teacher, LocalDateTime lessonStart, LocalDateTime lessonEnd);
-
-
 
     @Transactional
     @Modifying
