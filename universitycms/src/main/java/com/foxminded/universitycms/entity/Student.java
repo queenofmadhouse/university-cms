@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,4 +24,19 @@ public class Student extends User {
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Student student = (Student) o;
+
+        return Objects.equals(group, student.group);
+    }
+
+    @Override
+    public int hashCode() {
+        return group != null ? group.hashCode() : 0;
+    }
 }

@@ -17,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.util.Objects;
 import java.util.Set;
 
 @Builder
@@ -48,4 +49,27 @@ public class Course {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<Teacher> teachers;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Course course = (Course) o;
+
+        if (courseId != course.courseId) return false;
+        if (!Objects.equals(courseName, course.courseName)) return false;
+        if (!Objects.equals(courseDescription, course.courseDescription))
+            return false;
+        return Objects.equals(teachers, course.teachers);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (courseId ^ (courseId >>> 32));
+        result = 31 * result + (courseName != null ? courseName.hashCode() : 0);
+        result = 31 * result + (courseDescription != null ? courseDescription.hashCode() : 0);
+        result = 31 * result + (teachers != null ? teachers.hashCode() : 0);
+        return result;
+    }
 }
