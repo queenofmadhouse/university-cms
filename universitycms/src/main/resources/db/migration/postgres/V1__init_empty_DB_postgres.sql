@@ -41,6 +41,15 @@ CREATE TABLE university.teachers_courses_relation (
                                                       UNIQUE (user_id, course_id)
 );
 
+CREATE TABLE university.groups_courses_relation (
+                                                    id SERIAL PRIMARY KEY,
+                                                    group_id INTEGER NOT NULL,
+                                                    course_id INTEGER NOT NULL,
+                                                    FOREIGN KEY (group_id) REFERENCES university.groups (group_id),
+                                                    FOREIGN KEY (course_id) REFERENCES university.courses (course_id),
+                                                    UNIQUE (group_id, course_id)
+);
+
 CREATE TABLE university.schedule (
                                      id SERIAL PRIMARY KEY,
                                      user_id INTEGER NOT NULL,
