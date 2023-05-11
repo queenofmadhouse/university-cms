@@ -31,8 +31,12 @@ public class Schedule {
     private Long scheduleId;
 
     @OneToOne
-    @JoinColumn(name = "id")
-    private TeacherCourseRelation teacherCourseRelation;
+    @JoinColumn(name = "user_id")
+    private Teacher teacher;
+
+    @OneToOne
+    @JoinColumn(name = "course_id")
+    private Course course;
 
     @OneToOne
     @JoinColumn(name = "group_id")
