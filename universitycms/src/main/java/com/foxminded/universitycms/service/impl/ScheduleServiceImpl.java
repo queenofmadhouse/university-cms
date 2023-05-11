@@ -20,14 +20,16 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
 
-    public Map<LocalDateTime, List<Schedule>> findScheduleForMonthForTeacher(Teacher teacher) {
-        Map<LocalDateTime, List<Schedule>> scheduleForMonth = new HashMap<>();
+    public Map<LocalDate, List<Schedule>> findScheduleForMonthForTeacher(Teacher teacher) {
+        Map<LocalDate, List<Schedule>> scheduleForMonth = new HashMap<>();
 
         LocalDate today = LocalDate.now();
 
         for (int i = 0; i < 30; i++) {
 
-            LocalDateTime dateStartForStep = today.atStartOfDay().plusDays(i);
+            LocalDate dayDateForStep = today.plusDays(i);
+
+            LocalDateTime dateStartForStep = dayDateForStep.atStartOfDay();
             LocalDateTime dateEndForStep = dateStartForStep
                     .plusHours(23)
                     .plusMinutes(59)
@@ -35,20 +37,22 @@ public class ScheduleServiceImpl implements ScheduleService {
 
             List<Schedule> scheduleForDay = scheduleRepository.findAllByTeacherAndLessonStartBetween(
                     teacher, dateStartForStep, dateEndForStep);
-            scheduleForMonth.put(dateStartForStep, scheduleForDay);
+            scheduleForMonth.put(dayDateForStep, scheduleForDay);
         }
 
         return scheduleForMonth;
     }
 
-    public Map<LocalDateTime, List<Schedule>> findScheduleForMonthForGroup(Group group) {
-        Map<LocalDateTime, List<Schedule>> scheduleForMonth = new HashMap<>();
+    public Map<LocalDate, List<Schedule>> findScheduleForMonthForGroup(Group group) {
+        Map<LocalDate, List<Schedule>> scheduleForMonth = new HashMap<>();
 
         LocalDate today = LocalDate.now();
 
         for (int i = 0; i < 30; i++) {
 
-            LocalDateTime dateStartForStep = today.atStartOfDay().plusDays(i);
+            LocalDate dayDateForStep = today.plusDays(i);
+
+            LocalDateTime dateStartForStep = dayDateForStep.atStartOfDay();
             LocalDateTime dateEndForStep = dateStartForStep
                     .plusHours(23)
                     .plusMinutes(59)
@@ -56,7 +60,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
             List<Schedule> scheduleForDay = scheduleRepository.findAllByGroupAndLessonStartBetween(
                     group, dateStartForStep, dateEndForStep);
-            scheduleForMonth.put(dateStartForStep, scheduleForDay);
+            scheduleForMonth.put(dayDateForStep, scheduleForDay);
         }
 
         return scheduleForMonth;
