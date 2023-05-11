@@ -89,10 +89,8 @@
 						</rule>
 					</rules>
 					<excludes>
-						<exclude>com/foxminded/chendev/schoolconsoleapp/ApplicationRunner.class/</exclude>
-						<exclude>com/foxminded/chendev/schoolconsoleapp/entity/**</exclude>
-						<exclude>com/foxminded/chendev/schoolconsoleapp/reader/FileReaderException.class</exclude>
-						<exclude>com/foxminded/chendev/schoolconsoleapp/exception/**</exclude>
+						<exclude>com/foxminded/universitycms/ApplicationRunner.class</exclude>
+						<exclude>com/foxminded/universitycms/entity/**</exclude>
 					</excludes>
 				</configuration>
 				<executions>
