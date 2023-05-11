@@ -1,6 +1,9 @@
 package com.foxminded.universitycms.entity;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
@@ -15,6 +18,9 @@ import javax.persistence.Table;
 @SuperBuilder
 @NoArgsConstructor
 @Entity
+@Getter
+@Setter
+@ToString
 @Table(name = "users", schema = "university")
 @Inheritance(strategy = InheritanceType.JOINED)
 abstract class User {
@@ -22,17 +28,17 @@ abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private long userId;
+    protected long userId;
 
     @Column(name = "first_name")
-    private String firstName;
+    protected String firstName;
 
     @Column(name = "last_name")
-    private String lastName;
+    protected String lastName;
 
     @Column(name = "email")
-    private String email;
+    protected String email;
 
     @Column(name = "password")
-    private String password;
+    protected String password;
 }
