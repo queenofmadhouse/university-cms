@@ -6,7 +6,7 @@ import com.foxminded.universitycms.entity.Teacher;
 import com.foxminded.universitycms.repository.ScheduleRepository;
 import com.foxminded.universitycms.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
-@Repository
+@Service
 public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
