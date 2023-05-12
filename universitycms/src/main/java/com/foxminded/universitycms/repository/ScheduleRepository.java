@@ -18,6 +18,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     public List<Schedule> findAllByTeacherAndLessonStartBetween(
             Teacher teacher, LocalDateTime lessonStart, LocalDateTime lessonEnd);
 
+
     @Transactional
     @Modifying
     public void deleteByScheduleId(long id);
