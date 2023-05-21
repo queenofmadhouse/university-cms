@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -20,49 +20,25 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
 
-    public Map<LocalDate, List<Schedule>> findScheduleForMonthForTeacher(Teacher teacher) {
-        Map<LocalDate, List<Schedule>> scheduleForMonth = new HashMap<>();
-
+    public Map<LocalDate, List<Schedule>> findScheduleForMonthForTeacher(Teacher teacher, int days) {
         LocalDate today = LocalDate.now();
+        LocalDateTime startDate = today.atStartOfDay();
+        LocalDateTime endDate = today.plusDays(days).atTime(23, 59, 59);
 
-        for (int i = 0; i < 30; i++) {
+        List<Schedule> schedules = scheduleRepository.findAllByTeacherAndLessonStartBetween(teacher, startDate, endDate);
 
-            LocalDate dayDateForStep = today.plusDays(i);
-
-            LocalDateTime dateStartForStep = dayDateForStep.atStartOfDay();
-            LocalDateTime dateEndForStep = dateStartForStep
-                    .plusHours(23)
-                    .plusMinutes(59)
-                    .plusSeconds(59);
-
-            List<Schedule> scheduleForDay = scheduleRepository.findAllByTeacherAndLessonStartBetween(
-                    teacher, dateStartForStep, dateEndForStep);
-            scheduleForMonth.put(dayDateForStep, scheduleForDay);
-        }
-
-        return scheduleForMonth;
+        return schedules.stream()
+                .collect(Collectors.groupingBy(schedule -> schedule.getLessonStart().toLocalDate()));
     }
 
-    public Map<LocalDate, List<Schedule>> findScheduleForMonthForGroup(Group group) {
-        Map<LocalDate, List<Schedule>> scheduleForMonth = new HashMap<>();
-
+    public Map<LocalDate, List<Schedule>> findScheduleForMonthForGroup(Group group, int days) {
         LocalDate today = LocalDate.now();
+        LocalDateTime startDate = today.atStartOfDay();
+        LocalDateTime endDate = today.plusDays(days).atTime(23, 59, 59);
 
-        for (int i = 0; i < 30; i++) {
+        List<Schedule> schedules = scheduleRepository.findAllByGroupAndLessonStartBetween(group, startDate, endDate);
 
-            LocalDate dayDateForStep = today.plusDays(i);
-
-            LocalDateTime dateStartForStep = dayDateForStep.atStartOfDay();
-            LocalDateTime dateEndForStep = dateStartForStep
-                    .plusHours(23)
-                    .plusMinutes(59)
-                    .plusSeconds(59);
-
-            List<Schedule> scheduleForDay = scheduleRepository.findAllByGroupAndLessonStartBetween(
-                    group, dateStartForStep, dateEndForStep);
-            scheduleForMonth.put(dayDateForStep, scheduleForDay);
-        }
-
-        return scheduleForMonth;
+        return schedules.stream()
+                .collect(Collectors.groupingBy(schedule -> schedule.getLessonStart().toLocalDate()));
     }
 }
