@@ -25,7 +25,7 @@ import java.util.Set;
 @SuperBuilder
 @Getter
 @Setter
-@ToString(callSuper = true, exclude = "courses")
+@ToString(callSuper = true)
 @Entity
 @Table(name = "teachers", schema = "university")
 @PrimaryKeyJoinColumn(name = "user_id")
