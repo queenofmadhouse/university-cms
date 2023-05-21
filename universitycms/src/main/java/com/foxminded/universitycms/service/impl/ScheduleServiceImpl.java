@@ -20,6 +20,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
 
+    @Override
     public Map<LocalDate, List<Schedule>> getScheduleByTeacher(Teacher teacher, int days) {
         LocalDate today = LocalDate.now();
         LocalDateTime startDate = today.atStartOfDay();
@@ -31,6 +32,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                 .collect(Collectors.groupingBy(schedule -> schedule.getLessonStart().toLocalDate()));
     }
 
+    @Override
     public Map<LocalDate, List<Schedule>> getScheduleByGroup(Group group, int days) {
         LocalDate today = LocalDate.now();
         LocalDateTime startDate = today.atStartOfDay();
