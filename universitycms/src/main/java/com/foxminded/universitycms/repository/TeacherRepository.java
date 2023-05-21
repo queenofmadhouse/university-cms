@@ -11,22 +11,22 @@ import java.util.Optional;
 
 public interface TeacherRepository extends JpaRepository<Teacher, Long> {
 
-    public Optional<Teacher> findByUserId(long id);
+    Optional<Teacher> findByUserId(long id);
 
-    public Optional<Teacher> findByFirstName(String firstName);
+    Optional<Teacher> findByFirstName(String firstName);
 
-    public Optional<Teacher> findByLastName(String lastName);
+    Optional<Teacher> findByLastName(String lastName);
 
-    public Optional<Teacher> findByEmail(String email);
+    Optional<Teacher> findByEmail(String email);
 
-    public Optional<Teacher> findByPassword(String password);
+    Optional<Teacher> findByPassword(String password);
 
     @Modifying
     @Query(value = "INSERT INTO university.teachers_courses_relation (user_id, course_id) " +
             "VALUES (:teacher, :course)", nativeQuery = true)
-    public void addTeacherToCourse(Teacher teacher, Course course);
+    void addTeacherToCourse(Teacher teacher, Course course);
 
     @Transactional
     @Modifying
-    public void deleteByUserId(long id);
+    void deleteByUserId(long id);
 }

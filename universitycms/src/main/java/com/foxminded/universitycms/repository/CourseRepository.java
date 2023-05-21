@@ -12,18 +12,18 @@ import java.util.Optional;
 
 public interface CourseRepository extends JpaRepository<Course, Long> {
 
-    public Optional<Course> findByCourseName(String firstName);
+    Optional<Course> findByCourseName(String firstName);
 
-    public Optional<Course> findByCourseDescription(String courseDescription);
+    Optional<Course> findByCourseDescription(String courseDescription);
 
-    public Optional<Course> findByCourseId(long id);
+    Optional<Course> findByCourseId(long id);
 
     @Query(value = "SELECT course_id " +
             "FROM university.teachers_courses_relation " +
             "WHERE user_id = :teacher", nativeQuery = true)
-    public List<Course> findAllByTeacher(Teacher teacher);
+    List<Course> findAllByTeacher(Teacher teacher);
 
     @Transactional
     @Modifying
-    public void deleteByCourseId(long id);
+    void deleteByCourseId(long id);
 }

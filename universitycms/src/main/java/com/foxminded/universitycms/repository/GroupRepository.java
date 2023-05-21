@@ -12,21 +12,21 @@ import java.util.Optional;
 
 public interface GroupRepository extends JpaRepository<Group, Long> {
 
-    public Optional<Group> findByGroupName(String firstName);
+    Optional<Group> findByGroupName(String firstName);
 
-    public Optional<Group> findByGroupId(long id);
+    Optional<Group> findByGroupId(long id);
 
     @Query (value = "SELECT group_id " +
             "FROM university.groups_courses_relation " +
             "WHERE course_id = :course", nativeQuery = true)
-    public List<Group> findAllByCourses(Course course);
+    List<Group> findAllByCourses(Course course);
 
     @Modifying
     @Query(value = "INSERT INTO university.groups_courses_relation (group_id, course_id) " +
             "VALUES (:group, :course)", nativeQuery = true)
-    public void addGroupToCourse(Group group, Course course);
+    void addGroupToCourse(Group group, Course course);
 
     @Transactional
     @Modifying
-    public void deleteByGroupId(long id);
+    void deleteByGroupId(long id);
 }

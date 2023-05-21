@@ -11,19 +11,19 @@ import java.util.Optional;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
-    public Optional<Student> findByUserId(long id);
+    Optional<Student> findByUserId(long id);
 
-    public Optional<Student> findByFirstName(String firstName);
+    Optional<Student> findByFirstName(String firstName);
 
-    public Optional<Student> findByLastName(String lastName);
+    Optional<Student> findByLastName(String lastName);
 
-    public Optional<Student> findByEmail(String email);
+    Optional<Student> findByEmail(String email);
 
-    public Optional<Student> findByPassword(String password);
+    Optional<Student> findByPassword(String password);
 
-    public List<Student> findAllByGroup(Group group);
+    List<Student> findAllByGroup(Group group);
 
     @Transactional
     @Modifying
-    public void deleteByUserId(long id);
+    void deleteByUserId(long id);
 }

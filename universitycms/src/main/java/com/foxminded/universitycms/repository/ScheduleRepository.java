@@ -12,14 +12,14 @@ import java.util.List;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
-    public List<Schedule> findAllByGroupAndLessonStartBetween(
+    List<Schedule> findAllByGroupAndLessonStartBetween(
             Group group, LocalDateTime lessonStart, LocalDateTime lessonEnd);
 
-    public List<Schedule> findAllByTeacherAndLessonStartBetween(
+    List<Schedule> findAllByTeacherAndLessonStartBetween(
             Teacher teacher, LocalDateTime lessonStart, LocalDateTime lessonEnd);
 
 
     @Transactional
     @Modifying
-    public void deleteByScheduleId(long id);
+    void deleteByScheduleId(long id);
 }
