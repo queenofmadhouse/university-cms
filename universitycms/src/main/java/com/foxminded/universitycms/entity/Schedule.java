@@ -49,7 +49,6 @@ public class Schedule {
     private LocalDateTime lessonStart;
 
     @Column(name = "lesson_end")
-
     private LocalDateTime lessonEnd;
 
     @Column(name = "lesson_description")
