@@ -46,18 +46,18 @@ public class Teacher extends User{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (!(o instanceof Teacher)) return false;
+        if (!super.equals(o)) return false;
         Teacher teacher = (Teacher) o;
-
-        if (!Objects.equals(department, teacher.department)) return false;
-        return Objects.equals(courses, teacher.courses);
+        return Objects.equals(getUserId(), teacher.getUserId()) &&
+                Objects.equals(getFirstName(), teacher.getFirstName()) &&
+                Objects.equals(getLastName(), teacher.getLastName()) &&
+                Objects.equals(getEmail(), teacher.getEmail()) &&
+                Objects.equals(getDepartment(), teacher.getDepartment());
     }
 
     @Override
     public int hashCode() {
-        int result = department != null ? department.hashCode() : 0;
-        result = 31 * result + (courses != null ? courses.hashCode() : 0);
-        return result;
+        return Objects.hash(super.hashCode(), getDepartment());
     }
 }

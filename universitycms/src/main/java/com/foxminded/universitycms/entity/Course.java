@@ -54,22 +54,14 @@ public class Course {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Course course = (Course) o;
-
-        if (courseId != course.courseId) return false;
-        if (!Objects.equals(courseName, course.courseName)) return false;
-        if (!Objects.equals(courseDescription, course.courseDescription))
-            return false;
-        return Objects.equals(teachers, course.teachers);
+        return courseId == course.courseId &&
+                Objects.equals(courseName, course.courseName) &&
+                Objects.equals(courseDescription, course.courseDescription);
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (courseId ^ (courseId >>> 32));
-        result = 31 * result + (courseName != null ? courseName.hashCode() : 0);
-        result = 31 * result + (courseDescription != null ? courseDescription.hashCode() : 0);
-        result = 31 * result + (teachers != null ? teachers.hashCode() : 0);
-        return result;
+        return Objects.hash(courseId, courseName, courseDescription, teachers);
     }
 }

@@ -32,11 +32,15 @@ public class Student extends User {
 
         Student student = (Student) o;
 
-        return Objects.equals(group, student.group);
+        return Objects.equals(getUserId(), student.getUserId()) &&
+                Objects.equals(getFirstName(), student.getFirstName()) &&
+                Objects.equals(getLastName(), student.getLastName()) &&
+                Objects.equals(getEmail(), student.getEmail()) &&
+                Objects.equals(group, student.group);
     }
 
     @Override
     public int hashCode() {
-        return group != null ? group.hashCode() : 0;
+        return Objects.hash(super.hashCode(), getGroup());
     }
 }

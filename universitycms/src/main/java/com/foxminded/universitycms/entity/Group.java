@@ -53,19 +53,12 @@ public class Group {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Group group = (Group) o;
-
-        if (groupId != group.groupId) return false;
-        if (!Objects.equals(groupName, group.groupName)) return false;
-        return Objects.equals(courses, group.courses);
+        return groupId == group.groupId && Objects.equals(groupName, group.groupName);
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (groupId ^ (groupId >>> 32));
-        result = 31 * result + (groupName != null ? groupName.hashCode() : 0);
-        result = 31 * result + (courses != null ? courses.hashCode() : 0);
-        return result;
+        return Objects.hash(groupId, groupName);
     }
 }
