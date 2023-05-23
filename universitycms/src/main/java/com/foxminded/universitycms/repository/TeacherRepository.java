@@ -21,11 +21,6 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long> {
 
     Optional<Teacher> findByPassword(String password);
 
-    @Modifying
-    @Query(value = "INSERT INTO university.teachers_courses_relation (user_id, course_id) " +
-            "VALUES (:teacher, :course)", nativeQuery = true)
-    void addTeacherToCourse(Teacher teacher, Course course);
-
     @Transactional
     @Modifying
     void deleteByUserId(long id);

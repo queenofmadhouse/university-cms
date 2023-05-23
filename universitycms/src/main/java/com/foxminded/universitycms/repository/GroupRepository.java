@@ -16,15 +16,8 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
 
     Optional<Group> findByGroupId(long id);
 
-    @Query (value = "SELECT group_id " +
-            "FROM university.groups_courses_relation " +
-            "WHERE course_id = :course", nativeQuery = true)
+    @Query (value = "SELECT g FROM Group g JOIN g.courses c WHERE c = :course")
     List<Group> findAllByCourses(Course course);
-
-    @Modifying
-    @Query(value = "INSERT INTO university.groups_courses_relation (group_id, course_id) " +
-            "VALUES (:group, :course)", nativeQuery = true)
-    void addGroupToCourse(Group group, Course course);
 
     @Transactional
     @Modifying
