@@ -13,6 +13,9 @@ VALUES (2, 'Biology', 'Hard');
 INSERT INTO university.groups (group_id, group_name)
 VALUES (1, 'A5');
 
+INSERT INTO university.groups (group_id, group_name)
+VALUES (2, 'B3');
+
 INSERT INTO university.schedule (id, user_id, course_id, group_id, lesson_start, lesson_end, lesson_description)
 VALUES (1, 1, 2, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '1' HOUR, 'Description');
 
@@ -24,3 +27,9 @@ VALUES (1, 1);
 
 INSERT INTO university.teachers_courses_relation (user_id, course_id)
 VALUES (1, 2);
+
+INSERT INTO university.groups_courses_relation (group_id, course_id)
+VALUES (1, 1);
+
+INSERT INTO university.groups_courses_relation (group_id, course_id)
+VALUES (2, 1);
