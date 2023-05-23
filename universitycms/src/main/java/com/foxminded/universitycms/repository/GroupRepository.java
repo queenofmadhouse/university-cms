@@ -17,7 +17,7 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
     Optional<Group> findByGroupId(long id);
 
     @Query (value = "SELECT g FROM Group g JOIN g.courses c WHERE c = :course")
-    List<Group> findAllByCourses(Course course);
+    List<Group> findAllByCourse(Course course);
 
     @Transactional
     @Modifying
