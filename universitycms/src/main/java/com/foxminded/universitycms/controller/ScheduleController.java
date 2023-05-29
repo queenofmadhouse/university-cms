@@ -30,7 +30,7 @@ public class ScheduleController {
     @GetMapping("/schedule")
     public String getStudentSchedule(Model model) {
 
-        Group group = studentService.findById(4).getGroup();
+        Group group = studentService.findById(81).getGroup();
 
         Map<LocalDate, List<Schedule>> schedules = scheduleService.getScheduleByGroup(group, 30);
         List<List<Day>> weeks = calendarCreater.prepareCalendar(schedules);
