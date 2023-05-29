@@ -1,5 +1,6 @@
 package com.foxminded.universitycms.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,6 +42,7 @@ public class Course {
     @Column(name = "course_description")
     private String courseDescription;
 
+    @JsonManagedReference
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "teachers_courses_relation",

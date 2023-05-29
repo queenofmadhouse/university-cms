@@ -1,5 +1,6 @@
 package com.foxminded.universitycms.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,9 +47,11 @@ public class Schedule {
     private Group group;
 
     @Column(name = "lesson_start")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime lessonStart;
 
     @Column(name = "lesson_end")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime lessonEnd;
 
     @Column(name = "lesson_description")

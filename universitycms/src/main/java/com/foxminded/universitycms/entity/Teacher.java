@@ -1,5 +1,6 @@
 package com.foxminded.universitycms.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,6 +35,7 @@ public class Teacher extends User{
     @Column(name = "department")
     private String department;
 
+    @JsonBackReference
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "teachers_courses_relation",
@@ -41,7 +44,7 @@ public class Teacher extends User{
             inverseJoinColumns = @JoinColumn(name = "course_id")
     )
     @ToString.Exclude
-    private List<Course> courses = new ArrayList<>();
+    private Set<Course> courses;
 
     @Override
     public boolean equals(Object o) {
