@@ -15,7 +15,7 @@ public class TeacherServiceImpl implements TeacherService {
     private final TeacherRepository teacherRepository;
 
     @Override
-    public Optional<Teacher> findByUserId(long id) {
-        return teacherRepository.findByUserId(id);
+    public Teacher findByUserId(long id) {
+        return teacherRepository.findByUserId(id).orElseThrow(RuntimeException::new);
     }
 }

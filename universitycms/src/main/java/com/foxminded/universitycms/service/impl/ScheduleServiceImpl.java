@@ -6,6 +6,7 @@ import com.foxminded.universitycms.entity.Teacher;
 import com.foxminded.universitycms.repository.ScheduleRepository;
 import com.foxminded.universitycms.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -42,5 +43,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         return schedules.stream()
                 .collect(Collectors.groupingBy(schedule -> schedule.getLessonStart().toLocalDate()));
+    }
+
+    @Override
+    public Schedule getScheduleById(long id) {
+        return scheduleRepository.getScheduleByScheduleId(id).orElseThrow(RuntimeException::new);
     }
 }
