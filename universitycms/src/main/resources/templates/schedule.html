@@ -1,0 +1,24 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Schedule</title>
+    <link rel="stylesheet" th:href="@{/css/schedule.css}" type="text/css">
+</head>
+<body>
+<h1>Welcome Jane!</h1>
+
+<h2>Your schedule for 30 days</h2>
+<table>
+    <tr th:each="week : ${weeks}">
+        <td th:each="day : ${week}">
+            <span th:text="${day.getDate.getDayOfMonth()} + '.' + ${day.getDate.getMonthValue()}"></span>
+            <div th:each="lesson : ${day.getLessons}" th:if="${lesson != null}">
+                <span th:text="${lesson.getCourse().getCourseName}"></span>
+                <span th:text="${lesson.getLessonStart.getHour()} + ':' + ${lesson.getLessonStart.getMinute()} + ' - ' + ${lesson.getLessonEnd.getHour()} + ':' + ${lesson.getLessonEnd.getMinute()}"></span>
+            </div>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>
