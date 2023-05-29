@@ -5,6 +5,7 @@
     <link rel="stylesheet" th:href="@{/css/schedule.css}" type="text/css">
 </head>
 <body>
+
 <h1>Welcome Jane!</h1>
 
 <h2>Your schedule for 30 days</h2>
@@ -13,12 +14,46 @@
         <td th:each="day : ${week}">
             <span th:text="${day.getDate.getDayOfMonth()} + '.' + ${day.getDate.getMonthValue()}"></span>
             <div th:each="lesson : ${day.getLessons}" th:if="${lesson != null}">
-                <span th:text="${lesson.getCourse().getCourseName}"></span>
+                <span th:text="${lesson.getCourse().getCourseName}" th:data-id="${lesson.getScheduleId()}" onclick="showLessonDetails(this)" style="cursor:pointer"></span>
                 <span th:text="${lesson.getLessonStart.getHour()} + ':' + ${lesson.getLessonStart.getMinute()} + ' - ' + ${lesson.getLessonEnd.getHour()} + ':' + ${lesson.getLessonEnd.getMinute()}"></span>
             </div>
         </td>
     </tr>
 </table>
+
+<div id="lessonDetails" style="display: none;">
+    <h3 id="lessonName"></h3>
+    <p id="teacherName"></p>
+    <p id="startTime"></p>
+    <p id="endTime"></p>
+    <p id="description"></p>
+</div>
+
+<script>
+    function showLessonDetails(element) {
+        let lessonId = element.getAttribute('data-id');
+        console.log('Lesson ID:', lessonId);
+        fetch(`/schedule/lesson/${lessonId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(lesson => {
+                console.log('Lesson:', lesson);
+                document.getElementById('lessonName').textContent = lesson.course.courseName;
+                document.getElementById('teacherName').textContent = "Teacher: " + lesson.teacher.firstName + " " + lesson.teacher.lastName;
+                document.getElementById('startTime').textContent = "Lesson starts at: " + lesson.lessonStart;
+                document.getElementById('endTime').textContent = "Lesson ends at: " + lesson.lessonEnd;
+                document.getElementById('description').textContent = "Description: " + lesson.lessonDescription;
+                document.getElementById('lessonDetails').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
 
 </body>
 </html>
