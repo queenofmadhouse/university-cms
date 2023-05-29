@@ -2,7 +2,6 @@ package com.foxminded.universitycms.datagenerator.impl;
 
 import com.foxminded.universitycms.datagenerator.CourseGenerator;
 import com.foxminded.universitycms.entity.Course;
-import com.foxminded.universitycms.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,9 +14,11 @@ import java.util.Random;
 public class CourseGeneratorImpl implements CourseGenerator {
 
     private static final String[] COURSE_NAMES = {
-            "Mathematics", "Physics",  "Biology", "Chemistry",
+            "Mathematics", "Physics", "Biology", "Chemistry",
             "History", "Geography", "Literature", "Computer Science",
-            "Physical Education", "Art"
+            "Physical Education", "Art","Philosophy", "Economics",
+            "Music", "Psychology", "Astronomy", "Political Science",
+            "Sociology", "Anthropology", "Environmental Science", "Film Studies"
     };
     private static final String[] DESCRIPTION_WORDS = {
             "fundamental", "concepts", "principles", "theories", "applications",
@@ -25,13 +26,13 @@ public class CourseGeneratorImpl implements CourseGenerator {
             "knowledge", "understanding", "critical", "thinking", "problem-solving",
             "collaboration", "communication", "innovation", "creativity", "research"
     };
-//    private final int amountOfCourses;
     private static final Random random = new Random();
+    private final int amountOfCourses;
 
     @Override
     public List<Course> generateData() {
         List<Course> generatedCourses = new ArrayList<>();
-        int amountOfCourses = 10;
+
         for (int i = 0; i < amountOfCourses; i++) {
 
             long courseId = (long) i + 1;

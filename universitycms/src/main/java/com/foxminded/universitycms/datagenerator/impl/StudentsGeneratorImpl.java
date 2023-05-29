@@ -3,8 +3,7 @@ package com.foxminded.universitycms.datagenerator.impl;
 import com.foxminded.universitycms.datagenerator.StudentsGenerator;
 import com.foxminded.universitycms.entity.Group;
 import com.foxminded.universitycms.entity.Student;
-import com.foxminded.universitycms.repository.GroupRepository;
-import com.foxminded.universitycms.repository.StudentRepository;
+
 import com.github.javafaker.Faker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -20,14 +19,11 @@ public class StudentsGeneratorImpl implements StudentsGenerator {
 
     private static final Random random = new Random();
     private static final Faker fakeValuesService = new Faker();
+    private final int amountOfStudents;
 
-    private final StudentRepository studentRepository;
-    private final GroupRepository groupRepository;
-
-    public List<Student> generateData(long amountOfStudents) {
+    public List<Student> generateData(List<Group> groups) {
 
         List<Student> studentList = new ArrayList<>();
-        List<Group> groups = groupRepository.findAll();
 
         for (int i = 0; i < amountOfStudents; i++) {
             Student student = Student.builder()
@@ -44,8 +40,6 @@ public class StudentsGeneratorImpl implements StudentsGenerator {
 
             studentList.add(student);
         }
-
-        studentRepository.saveAll(studentList);
 
         return studentList;
     }
