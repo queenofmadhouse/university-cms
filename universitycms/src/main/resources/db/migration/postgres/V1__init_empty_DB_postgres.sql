@@ -10,7 +10,7 @@ CREATE TABLE university.users (
 
 CREATE TABLE university.groups (
                                    group_id SERIAL PRIMARY KEY,
-                                   group_name VARCHAR(255) NOT NULL UNIQUE
+                                   group_name VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE university.students (
@@ -37,8 +37,7 @@ CREATE TABLE university.teachers_courses_relation (
                                                       user_id INTEGER NOT NULL,
                                                       course_id INTEGER NOT NULL,
                                                       FOREIGN KEY (user_id) REFERENCES university.teachers (user_id),
-                                                      FOREIGN KEY (course_id) REFERENCES university.courses (course_id),
-                                                      UNIQUE (user_id, course_id)
+                                                      FOREIGN KEY (course_id) REFERENCES university.courses (course_id)
 );
 
 CREATE TABLE university.groups_courses_relation (
@@ -46,8 +45,7 @@ CREATE TABLE university.groups_courses_relation (
                                                     group_id INTEGER NOT NULL,
                                                     course_id INTEGER NOT NULL,
                                                     FOREIGN KEY (group_id) REFERENCES university.groups (group_id),
-                                                    FOREIGN KEY (course_id) REFERENCES university.courses (course_id),
-                                                    UNIQUE (group_id, course_id)
+                                                    FOREIGN KEY (course_id) REFERENCES university.courses (course_id)
 );
 
 CREATE TABLE university.schedule (
