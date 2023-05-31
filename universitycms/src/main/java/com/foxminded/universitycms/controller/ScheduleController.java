@@ -2,6 +2,7 @@ package com.foxminded.universitycms.controller;
 
 import com.foxminded.universitycms.entity.Group;
 import com.foxminded.universitycms.entity.Schedule;
+import com.foxminded.universitycms.entity.Teacher;
 import com.foxminded.universitycms.service.ScheduleService;
 import com.foxminded.universitycms.service.StudentService;
 import com.foxminded.universitycms.service.TeacherService;
@@ -27,7 +28,7 @@ public class ScheduleController {
     private final TeacherService teacherService;
     private final CalendarCreater calendarCreater;
 
-    @GetMapping("/schedule")
+    @GetMapping("/studentschedule")
     public String getStudentSchedule(Model model) {
 
         Group group = studentService.findById(81).getGroup();
@@ -35,7 +36,18 @@ public class ScheduleController {
         Map<LocalDate, List<Schedule>> schedules = scheduleService.getScheduleByGroup(group, 30);
         List<List<Day>> weeks = calendarCreater.prepareCalendar(schedules);
         model.addAttribute("weeks", weeks);
-        return "schedule";
+        return "studentschedule";
+    }
+
+    @GetMapping("/teacherschedule")
+    public String getTeacherSchedule(Model model) {
+
+        Teacher teacher = teacherService.findByUserId(1L);
+
+        Map<LocalDate, List<Schedule>> schedules = scheduleService.getScheduleByTeacher(teacher, 30);
+        List<List<Day>> weeks = calendarCreater.prepareCalendar(schedules);
+        model.addAttribute("weeks", weeks);
+        return "teacherschedule";
     }
 
     @ResponseBody

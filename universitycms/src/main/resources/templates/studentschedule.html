@@ -12,10 +12,11 @@
 <table>
     <tr th:each="week : ${weeks}">
         <td th:each="day : ${week}">
-            <span th:text="${day.getDate.getDayOfMonth()} + '.' + ${day.getDate.getMonthValue()}"></span>
+
+            <span class="date" th:text="${day.getDate.getDayOfMonth()} + ' ' + ${day.getDate.getMonth().toString().toLowerCase()}"></span>
             <div th:each="lesson : ${day.getLessons}" th:if="${lesson != null}">
                 <span th:text="${lesson.getCourse().getCourseName}" th:data-id="${lesson.getScheduleId()}" onclick="showLessonDetails(this)" style="cursor:pointer"></span>
-                <span th:text="${lesson.getLessonStart.getHour()} + ':' + ${lesson.getLessonStart.getMinute()} + ' - ' + ${lesson.getLessonEnd.getHour()} + ':' + ${lesson.getLessonEnd.getMinute()}"></span>
+                <span th:text="${#temporals.format(lesson.lessonStart, 'HH:mm')} + ' - ' + ${#temporals.format(lesson.lessonEnd, 'HH:mm')}"></span>
             </div>
         </td>
     </tr>
