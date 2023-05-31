@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" th:href="@{css/login.css}" type="text/css">
 </head>
 <body>
 
@@ -10,16 +11,16 @@
     University CMS
   </h1>
 
-  <form action="loginProcessor" method="POST" class="login-form">
+  <form class="login-form" action="loginProcessor" method="POST">
     <div class="input-group">
-      <label for="email">Login</label>
-      <input type="email" id="email" name="email"> <br>
+      <label for="email">Email: </label>
+      <input type="email" id="email" name="email"><br>
     </div>
     <div class="input-group">
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password"> <br>
+      <label for="password">Password: </label>
+      <input type="password" id="password" name="password"><br>
     </div>
-    <button type="submit"> Login </button>
+    <button type="submit">Login</button>
   </form>
 
 </body>
