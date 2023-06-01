@@ -26,13 +26,13 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString(exclude = "teachers")
+@ToString
 @Entity
 @Table(name = "courses", schema = "university")
 public class Course {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = "course_id")
     private long courseId;
 
@@ -43,13 +43,14 @@ public class Course {
     private String courseDescription;
 
     @JsonManagedReference
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "teachers_courses_relation",
             schema = "university",
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
+    @ToString.Exclude
     private Set<Teacher> teachers;
 
     @Override
