@@ -5,8 +5,6 @@ import com.foxminded.universitycms.entity.Course;
 import com.foxminded.universitycms.entity.Group;
 import com.foxminded.universitycms.entity.Schedule;
 import com.foxminded.universitycms.entity.Teacher;
-import com.foxminded.universitycms.repository.ScheduleRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
