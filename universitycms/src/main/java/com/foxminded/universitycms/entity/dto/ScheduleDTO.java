@@ -1,4 +1,4 @@
-package com.foxminded.universitycms.dto;
+package com.foxminded.universitycms.entity.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

@@ -1,5 +1,6 @@
-package com.foxminded.universitycms.calendar;
+package com.foxminded.universitycms.service.impl;
 
+import com.foxminded.universitycms.entity.Day;
 import com.foxminded.universitycms.entity.Schedule;
 import lombok.RequiredArgsConstructor;
 
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
-public class CalendarCreater {
+public class CalendarService {
 
     private final int amountOfDays;
     private final int weekSize;

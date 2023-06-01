@@ -1,9 +1,9 @@
 package com.foxminded.universitycms.controller;
 
-import com.foxminded.universitycms.calendar.CalendarCreater;
-import com.foxminded.universitycms.calendar.Day;
-import com.foxminded.universitycms.dto.GroupDTO;
-import com.foxminded.universitycms.dto.ScheduleDTO;
+import com.foxminded.universitycms.service.impl.CalendarService;
+import com.foxminded.universitycms.entity.Day;
+import com.foxminded.universitycms.entity.dto.GroupDTO;
+import com.foxminded.universitycms.entity.dto.ScheduleDTO;
 import com.foxminded.universitycms.entity.Course;
 import com.foxminded.universitycms.entity.Group;
 import com.foxminded.universitycms.entity.Schedule;
@@ -42,7 +42,7 @@ public class ScheduleController {
     private final TeacherService teacherService;
     private final GroupService groupService;
     private final CourseService courseService;
-    private final CalendarCreater calendarCreater;
+    private final CalendarService calendarService;
 
     @GetMapping("/studentschedule")
     public String getStudentSchedule(Model model) {
@@ -50,8 +50,8 @@ public class ScheduleController {
         Group group = studentService.findById(81).getGroup(); // #TODO: should be changed to REAL userId
 
         Map<LocalDate, List<Schedule>> schedules = scheduleService.getScheduleByGroup(group, 30);
-        List<List<Day>> weeks = calendarCreater.prepareCalendar(schedules);
-        List<LocalDate> month = calendarCreater.prepareDates(30);
+        List<List<Day>> weeks = calendarService.prepareCalendar(schedules);
+        List<LocalDate> month = calendarService.prepareDates(30);
         model.addAttribute("month", month);
         model.addAttribute("weeks", weeks);
         return "studentschedule";
@@ -63,7 +63,7 @@ public class ScheduleController {
         Teacher teacher = teacherService.findByUserId(2L); // #TODO: should be changed to REAL userId
 
         Map<LocalDate, List<Schedule>> schedules = scheduleService.getScheduleByTeacher(teacher, 30);
-        List<List<Day>> weeks = calendarCreater.prepareCalendar(schedules);
+        List<List<Day>> weeks = calendarService.prepareCalendar(schedules);
         List<Course> courses = new ArrayList<>(teacher.getCourses());
         model.addAttribute("courses", courses);
         model.addAttribute("weeks", weeks);
