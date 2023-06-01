@@ -6,11 +6,13 @@ import com.foxminded.universitycms.entity.Teacher;
 import com.foxminded.universitycms.repository.ScheduleRepository;
 import com.foxminded.universitycms.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -20,6 +22,11 @@ import java.util.stream.Collectors;
 public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+
+    @Override
+    public void save(Schedule schedule) {
+        scheduleRepository.save(schedule);
+    }
 
     @Override
     public Map<LocalDate, List<Schedule>> getScheduleByTeacher(Teacher teacher, int days) {
@@ -48,5 +55,39 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public Schedule getScheduleById(long id) {
         return scheduleRepository.getScheduleByScheduleId(id).orElseThrow(RuntimeException::new);
+    }
+
+    @Override
+    public List<LocalTime> findFreeTimeForTeacherAndGroup(LocalDate date, Teacher teacher, Group group) {
+
+        LocalDateTime startTime = date.atStartOfDay().plusHours(8);
+        LocalDateTime endTime = date.atStartOfDay().plusHours(18);
+
+        List<Schedule> scheduleForTeacher = scheduleRepository.findAllByTeacherAndLessonStartBetween(teacher, startTime, endTime);
+        List<Schedule> scheduleForGroup = scheduleRepository.findAllByGroupAndLessonStartBetween(group, startTime, endTime);
+
+        List<Schedule> combinedSchedule = new ArrayList<>();
+        combinedSchedule.addAll(scheduleForTeacher);
+        combinedSchedule.addAll(scheduleForGroup);
+        combinedSchedule.sort(Comparator.comparing(Schedule::getLessonStart));
+
+        List<LocalTime> freeTimeSlots = new ArrayList<>();
+        LocalDateTime nextFreeTimeSlotStart = startTime;
+
+        for (Schedule schedule : combinedSchedule) {
+            while (schedule.getLessonStart().isAfter(nextFreeTimeSlotStart.plusMinutes(60))) {
+                freeTimeSlots.add(nextFreeTimeSlotStart.toLocalTime());
+                nextFreeTimeSlotStart = nextFreeTimeSlotStart.plusMinutes(60);
+            }
+
+            nextFreeTimeSlotStart = schedule.getLessonEnd().plusMinutes(10);  // +10 minutes for break
+        }
+
+        while (endTime.minusMinutes(60).isAfter(nextFreeTimeSlotStart)) {
+            freeTimeSlots.add(nextFreeTimeSlotStart.toLocalTime());
+            nextFreeTimeSlotStart = nextFreeTimeSlotStart.plusMinutes(60);
+        }
+
+        return freeTimeSlots;
     }
 }

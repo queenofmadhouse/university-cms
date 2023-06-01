@@ -8,4 +8,6 @@ import java.util.List;
 public interface GroupService {
 
     List<Group> findAllByCourse(Course course);
+
+    Group findById(long id);
 }

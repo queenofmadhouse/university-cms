@@ -8,4 +8,6 @@ import java.util.List;
 public interface CourseService {
 
     List<Course> findAllByTeacher(Teacher teacher);
+
+    Course findById(Long id);
 }

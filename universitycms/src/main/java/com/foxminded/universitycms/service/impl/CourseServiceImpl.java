@@ -19,4 +19,9 @@ public class CourseServiceImpl implements CourseService {
     public List<Course> findAllByTeacher(Teacher teacher) {
         return courseRepository.findAllByTeacher(teacher);
     }
+
+    @Override
+    public Course findById(Long id) {
+        return courseRepository.findById(id).orElseThrow(RuntimeException::new);
+    }
 }
