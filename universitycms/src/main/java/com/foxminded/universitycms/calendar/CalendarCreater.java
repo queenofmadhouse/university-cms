@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
 public class CalendarCreater {
@@ -36,5 +38,13 @@ public class CalendarCreater {
         }
 
         return weeks;
+    }
+
+    public List<LocalDate> prepareDates(int amountOfDays) {
+        LocalDate today = LocalDate.now();
+
+        return IntStream.range(0, amountOfDays)
+                .mapToObj(today::plusDays)
+                .collect(Collectors.toList());
     }
 }
