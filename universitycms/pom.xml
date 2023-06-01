@@ -176,6 +176,7 @@
 					<excludes>
 						<exclude>com/foxminded/universitycms/ApplicationRunner.class</exclude>
 						<exclude>com/foxminded/universitycms/entity/**</exclude>
+						<exclude>com/foxminded/universitycms/configuration/**</exclude>
 					</excludes>
 				</configuration>
 				<executions>
