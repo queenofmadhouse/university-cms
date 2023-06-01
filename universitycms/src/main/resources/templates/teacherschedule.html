@@ -15,7 +15,8 @@
     <tr th:each="week : ${weeks}">
         <td th:each="day : ${week}">
 
-            <span class="date" th:text="${day.getDate.getDayOfMonth()} + ' ' + ${day.getDate.getMonth().toString().toLowerCase()}"></span>
+            <span class="date"
+                  th:text="${day.getDate.getDayOfMonth()} + ' ' + ${day.getDate.getMonth().toString().toLowerCase()}"></span>
             <div th:each="lesson : ${day.getLessons}" th:if="${lesson != null}">
                 <span th:text="${lesson.getCourse().getCourseName}" th:data-id="${lesson.getScheduleId()}"
                       onclick="showLessonDetails(this)" style="cursor:pointer"></span>
@@ -38,23 +39,56 @@
 
     <form id="add-lesson">
         <label for="courseName">Course Name:</label><br>
-        <input type="text" id="courseName" name="courseName"><br>
-        <label for="groupName">Group Name:</label><br>
-        <input type="text" id="groupName" name="groupName"><br>
-        <label for="lessonStart">Lesson Start (HH:mm):</label><br>
-        <input type="text" id="lessonStart" name="lessonStart"><br>
-        <label for="lessonEnd">Lesson End (HH:mm):</label><br>
-        <input type="text" id="lessonEnd" name="lessonEnd"><br>
+        <select id="courseName" name="courseName">
+            <option value="">Please select...</option>
+            <option th:each="course : ${courses}" th:value="${course.getCourseId()}"
+                    th:text="${course.getCourseName()}"></option>
+        </select><br>
+        <label for="groupName">Group name:</label><br>
+        <select id="groupName" name="groupName">
+            <option value="">Please select...</option>
+            <option th:each="group : ${groups}" th:value="${group.getId()}" th:text="${group.getGroupName()}"></option>
+        </select><br>
+        <label for="lessonDate">Lesson date:</label><br>
+        <select id="lessonDate" name="lessonDate">
+            <option value="">Please select...</option>
+            <option th:each="day : ${month}" th:value="${day}" th:text="${day}"></option>
+        </select><br>
+        <label for="lessonStart">Lesson starts at:</label><br>
+        <select id="lessonStart" name="lessonStart">
+            <option value="">Please select...</option>
+            <option th:each="time : ${timeSlots}" th:value="${time}" th:text="${time}"></option>
+        </select><br>
         <label for="lessonDescription">Lesson Description:</label><br>
         <textarea id="lessonDescription" name="lessonDescription"></textarea><br>
+        <!-- Don't forget to add a submit button -->
         <input type="submit" value="Add Lesson">
     </form>
 </div>
 
 <script>
+    window.onload = function () {
+        let startDate = new Date();
+        let endDate = new Date();
+        endDate.setDate(startDate.getDate() + 30); // Adjust this for the range you want
+
+        let dateSelect = document.getElementById('lessonDate');
+        dateSelect.innerHTML = ''; // Clear any existing options
+
+        for (let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
+            let option = document.createElement('option');
+            option.value = d.toISOString().slice(0, 10);
+            option.textContent = d.toISOString().slice(0, 10);
+            dateSelect.appendChild(option);
+        }
+    };
+</script>
+
+<script>
     function showLessonDetails(element) {
         let lessonId = element.getAttribute('data-id');
         console.log('Lesson ID:', lessonId);
+
         fetch(`/schedule/lesson/${lessonId}`)
             .then(response => {
                 if (!response.ok) {
@@ -75,6 +109,94 @@
                 console.error('Error:', error);
             });
     }
+</script>
+
+<script>
+    document.getElementById('courseName').addEventListener('change', function () {
+        let selectedCourse = this.value;
+
+        fetch(`/getGroups?course=${selectedCourse}`)
+            .then(response => response.json())
+            .then(data => {
+                let groupSelect = document.getElementById('groupName');
+
+                groupSelect.innerHTML = '';
+
+                data.forEach(group => {
+                    let option = document.createElement('option');
+                    option.value = group.id;
+                    option.textContent = group.name;
+                    groupSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    });
+</script>
+
+<script>
+    document.getElementById('lessonDate').addEventListener('change', function () {
+        let selectedDate = this.value;
+        let teacherId = 2; // #TODO should be changed to REAL teacherId
+        let groupId = document.getElementById('groupName').value;
+
+        if (selectedDate !== "" && teacherId !== "" && groupId !== "") {
+            fetch(`/getTimeSlots/${selectedDate}/${teacherId}/${groupId}`)
+                .then(response => response.json())
+                .then(data => {
+                    let timeSlotSelect = document.getElementById('lessonStart');
+
+                    timeSlotSelect.innerHTML = '';
+
+                    data.forEach(timeSlot => {
+                        let option = document.createElement('option');
+                        option.value = timeSlot;
+                        option.textContent = timeSlot;
+                        timeSlotSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }})
+</script>
+
+<script>
+    document.getElementById('add-lesson').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const course = document.getElementById('courseName').value;
+        const group = document.getElementById('groupName').value;
+        const lessonDate = document.getElementById('lessonDate').value;
+        const StartTime = document.getElementById('lessonStart').value;
+        const lessonDescription = document.getElementById('lessonDescription').value;
+
+        const lessonStart = `${lessonDate}T${StartTime}`;
+        let date = new Date(lessonStart);
+        date.setMinutes(date.getMinutes() + 50);
+        const lessonEnd = date.toISOString().slice(0, 16);
+
+        const lessonData = {
+            course,
+            group,
+            lessonStart,
+            lessonEnd,
+            lessonDescription,
+            teacher: 2  // #TODO should be changed to REAL teacher id
+        };
+
+        fetch('/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(lessonData),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
 </script>
 
 </body>

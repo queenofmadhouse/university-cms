@@ -32,3 +32,51 @@ tr:nth-child(even) {
     font-weight: bold;
     color: midnightblue;
 }
+
+.add-lesson-form {
+    width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.add-lesson-form h2 {
+    text-align: center;
+    color: #333;
+}
+
+.add-lesson-form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.add-lesson-form form label {
+    font-weight: bold;
+    margin: 10px 0 5px;
+    color: #555;
+}
+
+.add-lesson-form form select,
+.add-lesson-form form input[type="submit"] {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+}
+
+.add-lesson-form form select {
+    font-size: 16px;
+}
+
+.add-lesson-form form input[type="submit"] {
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-lesson-form form input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
