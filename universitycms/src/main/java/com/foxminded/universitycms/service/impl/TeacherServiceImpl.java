@@ -6,6 +6,7 @@ import com.foxminded.universitycms.service.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -17,5 +18,10 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public Teacher findByUserId(long id) {
         return teacherRepository.findByUserId(id).orElseThrow(RuntimeException::new);
+    }
+
+    @Override
+    public void saveAll(List<Teacher> teachers) {
+        teacherRepository.saveAll(teachers);
     }
 }

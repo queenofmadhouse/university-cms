@@ -10,4 +10,6 @@ public interface GroupService {
     List<Group> findAllByCourse(Course course);
 
     Group findById(long id);
+
+    void saveAll(List<Group> groups);
 }

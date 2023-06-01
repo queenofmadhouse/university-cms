@@ -24,4 +24,9 @@ public class CourseServiceImpl implements CourseService {
     public Course findById(Long id) {
         return courseRepository.findById(id).orElseThrow(RuntimeException::new);
     }
+
+    @Override
+    public void saveAll(List<Course> courses) {
+        courseRepository.saveAll(courses);
+    }
 }

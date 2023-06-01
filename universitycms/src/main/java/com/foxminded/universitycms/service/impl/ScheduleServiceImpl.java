@@ -29,6 +29,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
+    public void saveAll(List<Schedule> schedules) {
+        scheduleRepository.saveAll(schedules);
+    }
+
+    @Override
     public Map<LocalDate, List<Schedule>> getScheduleByTeacher(Teacher teacher, int days) {
         LocalDate today = LocalDate.now();
         LocalDateTime startDate = today.atStartOfDay();

@@ -26,4 +26,8 @@ public class GroupServiceImpl implements GroupService {
         return groupRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
+    @Override
+    public void saveAll(List<Group> groups) {
+        groupRepository.saveAll(groups);
+    }
 }

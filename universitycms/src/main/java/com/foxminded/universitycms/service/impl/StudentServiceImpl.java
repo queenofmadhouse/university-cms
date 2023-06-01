@@ -6,6 +6,8 @@ import com.foxminded.universitycms.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -15,5 +17,10 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student findById(long id) {
         return studentRepository.findById(id).orElseThrow(() -> new RuntimeException("ex"));
+    }
+
+    @Override
+    public void saveAll(List<Student> students) {
+        studentRepository.saveAll(students);
     }
 }
