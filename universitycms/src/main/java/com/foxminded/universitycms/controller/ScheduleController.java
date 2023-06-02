@@ -1,20 +1,19 @@
 package com.foxminded.universitycms.controller;
 
-import com.foxminded.universitycms.service.impl.CalendarService;
-import com.foxminded.universitycms.entity.Day;
-import com.foxminded.universitycms.entity.dto.GroupDTO;
-import com.foxminded.universitycms.entity.dto.ScheduleDTO;
 import com.foxminded.universitycms.entity.Course;
+import com.foxminded.universitycms.entity.Day;
 import com.foxminded.universitycms.entity.Group;
 import com.foxminded.universitycms.entity.Schedule;
 import com.foxminded.universitycms.entity.Teacher;
+import com.foxminded.universitycms.entity.dto.GroupDTO;
+import com.foxminded.universitycms.entity.dto.ScheduleDTO;
 import com.foxminded.universitycms.service.CourseService;
 import com.foxminded.universitycms.service.GroupService;
 import com.foxminded.universitycms.service.ScheduleService;
 import com.foxminded.universitycms.service.StudentService;
 import com.foxminded.universitycms.service.TeacherService;
+import com.foxminded.universitycms.service.impl.CalendarService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Slf4j
 @RequiredArgsConstructor
 @Controller
 public class ScheduleController {
@@ -90,8 +88,6 @@ public class ScheduleController {
 
         Teacher teacher = teacherService.findByUserId(teacherId);
         Group group = groupService.findById(groupId);
-
-        log.info(scheduleService.findFreeTimeForTeacherAndGroup(selectedDate, teacher, group).toString());
 
         return scheduleService.findFreeTimeForTeacherAndGroup(selectedDate, teacher, group);
     }

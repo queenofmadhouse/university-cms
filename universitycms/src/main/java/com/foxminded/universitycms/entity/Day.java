@@ -1,6 +1,5 @@
 package com.foxminded.universitycms.entity;
 
-import com.foxminded.universitycms.entity.Schedule;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

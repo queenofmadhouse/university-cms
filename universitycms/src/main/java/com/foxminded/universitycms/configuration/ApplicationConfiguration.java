@@ -1,6 +1,6 @@
 package com.foxminded.universitycms.configuration;
 
-import com.foxminded.universitycms.calendar.CalendarCreater;
+import com.foxminded.universitycms.service.impl.CalendarService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,7 +31,7 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public CalendarCreater calendarCreater() {
-        return new CalendarCreater(CALENDAR_AMOUNT_OF_DAYS, CALENDAR_WEEK_SIZE);
+    public CalendarService calendarCreater() {
+        return new CalendarService(CALENDAR_AMOUNT_OF_DAYS, CALENDAR_WEEK_SIZE);
     }
 }

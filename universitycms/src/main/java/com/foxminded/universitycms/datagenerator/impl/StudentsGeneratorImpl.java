@@ -3,7 +3,6 @@ package com.foxminded.universitycms.datagenerator.impl;
 import com.foxminded.universitycms.datagenerator.StudentsGenerator;
 import com.foxminded.universitycms.entity.Group;
 import com.foxminded.universitycms.entity.Student;
-
 import com.github.javafaker.Faker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
