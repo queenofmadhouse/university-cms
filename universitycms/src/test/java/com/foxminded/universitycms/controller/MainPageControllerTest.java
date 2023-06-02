@@ -10,13 +10,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @WebMvcTest(MainPageController.class)
-class MainPageControllerTestIT {
+class MainPageControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    void homePage_ShouldReturnHomePage() throws Exception {
+    void getHomePageShouldReturnHomePageView() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("home"));
