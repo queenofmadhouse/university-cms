@@ -25,4 +25,9 @@ public class StudentServiceImpl implements StudentService {
     public void saveAll(List<Student> students) {
         studentRepository.saveAll(students);
     }
+
+    @Override
+    public boolean isTableEmpty() {
+        return studentRepository.count() == 0;
+    }
 }

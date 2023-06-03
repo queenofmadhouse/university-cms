@@ -36,4 +36,9 @@ public class GroupServiceImpl implements GroupService {
     public void saveAll(List<Group> groups) {
         groupRepository.saveAll(groups);
     }
+
+    @Override
+    public boolean isTableEmpty() {
+        return groupRepository.count() == 0;
+    }
 }

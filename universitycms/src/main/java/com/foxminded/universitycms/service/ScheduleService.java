@@ -22,4 +22,7 @@ public interface ScheduleService {
     void save(Schedule schedule);
 
     void saveAll(List<Schedule> schedules);
+
+    boolean isTableEmpty();
+
 }

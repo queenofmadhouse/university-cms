@@ -14,4 +14,6 @@ public interface GroupService {
     Group findById(long id);
 
     void saveAll(List<Group> groups);
+
+    boolean isTableEmpty();
 }
