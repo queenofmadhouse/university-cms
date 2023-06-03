@@ -1,6 +1,7 @@
 package com.foxminded.universitycms.service.impl;
 
 import com.foxminded.universitycms.entity.Student;
+import com.foxminded.universitycms.exception.DatabaseRuntimeException;
 import com.foxminded.universitycms.repository.StudentRepository;
 import com.foxminded.universitycms.service.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student findById(long id) {
-        return studentRepository.findById(id).orElseThrow(() -> new RuntimeException("ex"));
+        return studentRepository.findById(id).orElseThrow(() ->
+                new DatabaseRuntimeException("Can't find student by id: " + id));
     }
 
     @Override

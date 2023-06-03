@@ -1,6 +1,7 @@
 package com.foxminded.universitycms.service.impl;
 
 import com.foxminded.universitycms.entity.Teacher;
+import com.foxminded.universitycms.exception.DatabaseRuntimeException;
 import com.foxminded.universitycms.repository.TeacherRepository;
 import com.foxminded.universitycms.service.TeacherService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,8 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Teacher findByUserId(long id) {
-        return teacherRepository.findByUserId(id).orElseThrow(RuntimeException::new);
+        return teacherRepository.findByUserId(id).orElseThrow(() ->
+                new DatabaseRuntimeException("Can't find teacher by id: " + id));
     }
 
     @Override

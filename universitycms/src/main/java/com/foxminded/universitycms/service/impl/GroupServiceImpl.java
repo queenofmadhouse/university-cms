@@ -2,6 +2,7 @@ package com.foxminded.universitycms.service.impl;
 
 import com.foxminded.universitycms.entity.Course;
 import com.foxminded.universitycms.entity.Group;
+import com.foxminded.universitycms.exception.DatabaseRuntimeException;
 import com.foxminded.universitycms.repository.GroupRepository;
 import com.foxminded.universitycms.service.GroupService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,8 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public Group findById(long id) {
-        return groupRepository.findById(id).orElseThrow(RuntimeException::new);
+        return groupRepository.findById(id).orElseThrow(() ->
+                new DatabaseRuntimeException("Can't find group by id: " + id));
     }
 
     @Override

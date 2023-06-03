@@ -3,6 +3,7 @@ package com.foxminded.universitycms.service.impl;
 import com.foxminded.universitycms.entity.Group;
 import com.foxminded.universitycms.entity.Schedule;
 import com.foxminded.universitycms.entity.Teacher;
+import com.foxminded.universitycms.exception.DatabaseRuntimeException;
 import com.foxminded.universitycms.repository.ScheduleRepository;
 import com.foxminded.universitycms.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +60,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public Schedule getScheduleById(long id) {
-        return scheduleRepository.getScheduleByScheduleId(id).orElseThrow(RuntimeException::new);
+        return scheduleRepository.getScheduleByScheduleId(id).orElseThrow(() ->
+                new DatabaseRuntimeException("Can't find schedule by id: " + id));
     }
 
     @Override
