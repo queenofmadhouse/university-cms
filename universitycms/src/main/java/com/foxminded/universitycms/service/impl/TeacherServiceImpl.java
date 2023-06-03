@@ -1,5 +1,6 @@
 package com.foxminded.universitycms.service.impl;
 
+import com.foxminded.universitycms.entity.Course;
 import com.foxminded.universitycms.entity.Teacher;
 import com.foxminded.universitycms.exception.DatabaseRuntimeException;
 import com.foxminded.universitycms.repository.TeacherRepository;
@@ -14,6 +15,14 @@ import java.util.List;
 public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository;
+
+    @Override
+    public List<Course> findAllCoursesRelatedToTeacher(long teacherId) {
+
+        Teacher teacher = findById(teacherId);
+
+        return teacherRepository.findAllCoursesRelatedToTeacher(teacher);
+    }
 
     @Override
     public Teacher findById(long id) {

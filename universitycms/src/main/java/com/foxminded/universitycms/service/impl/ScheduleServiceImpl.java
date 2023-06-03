@@ -6,6 +6,8 @@ import com.foxminded.universitycms.entity.Teacher;
 import com.foxminded.universitycms.exception.DatabaseRuntimeException;
 import com.foxminded.universitycms.repository.ScheduleRepository;
 import com.foxminded.universitycms.service.ScheduleService;
+import com.foxminded.universitycms.service.StudentService;
+import com.foxminded.universitycms.service.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,8 @@ import java.util.stream.Collectors;
 public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final StudentService studentService;
+    private final TeacherService teacherService;
 
     @Override
     public void save(Schedule schedule) {
@@ -35,7 +39,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public Map<LocalDate, List<Schedule>> findScheduleByTeacher(Teacher teacher, int days) {
+    public Map<LocalDate, List<Schedule>> findScheduleByTeacher(Long teacherId, int days) {
+
+        Teacher teacher = teacherService.findById(teacherId);
         LocalDate today = LocalDate.now();
         LocalDateTime startDate = today.atStartOfDay();
         LocalDateTime endDate = today.plusDays(days).atTime(23, 59, 59);
@@ -47,7 +53,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public Map<LocalDate, List<Schedule>> findScheduleByGroup(Group group, int days) {
+    public Map<LocalDate, List<Schedule>> findScheduleByStudent(Long studentId, int days) {
+
+        Group group = studentService.findById(studentId).getGroup();
         LocalDate today = LocalDate.now();
         LocalDateTime startDate = today.atStartOfDay();
         LocalDateTime endDate = today.plusDays(days).atTime(23, 59, 59);

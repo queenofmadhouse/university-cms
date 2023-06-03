@@ -11,9 +11,9 @@ import java.util.Map;
 
 public interface ScheduleService {
 
-    Map<LocalDate, List<Schedule>> findScheduleByTeacher(Teacher teacher, int days);
+    Map<LocalDate, List<Schedule>> findScheduleByTeacher(Long teacherId, int days);
 
-    Map<LocalDate, List<Schedule>> findScheduleByGroup(Group group, int days);
+    Map<LocalDate, List<Schedule>> findScheduleByStudent(Long studentId, int days);
 
     Schedule findById(long id);
 
