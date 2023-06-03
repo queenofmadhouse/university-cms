@@ -22,6 +22,11 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public List<Course> findAll() {
+        return courseRepository.findAll();
+    }
+
+    @Override
     public Course findById(Long id) {
         return courseRepository.findById(id).orElseThrow(() ->
                 new DatabaseRuntimeException("Can't find course by id: " + id));

@@ -9,6 +9,8 @@ public interface GroupService {
 
     List<Group> findAllByCourse(Course course);
 
+    List<Group> findAll();
+
     Group findById(long id);
 
     void saveAll(List<Group> groups);
