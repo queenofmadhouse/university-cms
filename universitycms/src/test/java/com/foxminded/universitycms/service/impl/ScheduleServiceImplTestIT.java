@@ -29,7 +29,7 @@ class ScheduleServiceImplTestIT {
                 .groupId(999L)
                 .groupName("Not Exists").build();
 
-        Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService.getScheduleByGroup(notExistGroup, 30);
+        Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService.findScheduleByGroup(notExistGroup, 30);
 
         assertTrue(fundedSchedule.isEmpty());
     }
@@ -46,7 +46,7 @@ class ScheduleServiceImplTestIT {
                 .department("Not Exist")
                 .build();
 
-        Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService.getScheduleByTeacher(notExistTeacher, 30);
+        Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService.findScheduleByTeacher(notExistTeacher, 30);
 
         assertTrue(fundedSchedule.isEmpty());
     }
@@ -56,7 +56,7 @@ class ScheduleServiceImplTestIT {
 
         Group nullGroup = null;
 
-        Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService.getScheduleByGroup(nullGroup, 30);
+        Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService.findScheduleByGroup(nullGroup, 30);
 
         assertTrue(fundedSchedule.isEmpty());
     }
@@ -66,7 +66,7 @@ class ScheduleServiceImplTestIT {
 
         Teacher nullTeacher = null;
 
-        Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService.getScheduleByTeacher(nullTeacher, 30);
+        Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService.findScheduleByTeacher(nullTeacher, 30);
 
         assertTrue(fundedSchedule.isEmpty());
     }
@@ -93,7 +93,7 @@ class ScheduleServiceImplTestIT {
                 .groupId(1L)
                 .groupName("A5").build();
 
-        Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService.getScheduleByGroup(groupA5, 30);
+        Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService.findScheduleByGroup(groupA5, 30);
 
         assertNotNull(fundedSchedule);
         assertEquals(2, fundedSchedule.size());
@@ -131,7 +131,7 @@ class ScheduleServiceImplTestIT {
                 .groupId(1L)
                 .groupName("A5").build();
 
-        Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService.getScheduleByTeacher(teacherAlex, 30);
+        Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService.findScheduleByTeacher(teacherAlex, 30);
 
         assertNotNull(fundedSchedule);
         assertEquals(2, fundedSchedule.size());

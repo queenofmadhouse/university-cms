@@ -16,8 +16,8 @@ public class TeacherServiceImpl implements TeacherService {
     private final TeacherRepository teacherRepository;
 
     @Override
-    public Teacher findByUserId(long id) {
-        return teacherRepository.findByUserId(id).orElseThrow(() ->
+    public Teacher findById(long id) {
+        return teacherRepository.findById(id).orElseThrow(() ->
                 new DatabaseRuntimeException("Can't find teacher by id: " + id));
     }
 

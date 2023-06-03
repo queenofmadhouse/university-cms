@@ -67,7 +67,7 @@ class ScheduleControllerTest {
         Group group = new Group();
 
         when(studentService.findById(81)).thenReturn(new Student());
-        when(scheduleService.getScheduleByGroup(group, 30)).thenReturn(new HashMap<>());
+        when(scheduleService.findScheduleByGroup(group, 30)).thenReturn(new HashMap<>());
         when(calendarService.prepareCalendar(new HashMap<>())).thenReturn(new ArrayList<>());
         when(calendarService.prepareDates(30)).thenReturn(new ArrayList<>());
 
@@ -79,8 +79,8 @@ class ScheduleControllerTest {
     @Test
     void getTeacherScheduleShouldReturnTeacherScheduleView() throws Exception {
 
-        when(teacherService.findByUserId(2L)).thenReturn(teacher);
-        when(scheduleService.getScheduleByTeacher(teacher, 30)).thenReturn(new HashMap<>());
+        when(teacherService.findById(2L)).thenReturn(teacher);
+        when(scheduleService.findScheduleByTeacher(teacher, 30)).thenReturn(new HashMap<>());
         when(calendarService.prepareCalendar(new HashMap<>())).thenReturn(new ArrayList<>());
         when(teacher.getCourses()).thenReturn(new HashSet<>());
 
@@ -113,7 +113,7 @@ class ScheduleControllerTest {
         Teacher teacher = new Teacher();
         Group group = new Group();
 
-        when(teacherService.findByUserId(1L)).thenReturn(teacher);
+        when(teacherService.findById(1L)).thenReturn(teacher);
         when(groupService.findById(1L)).thenReturn(group);
         when(scheduleService.findFreeTimeForTeacherAndGroup(selectedDate, teacher, group)).thenReturn(new ArrayList<>());
 
@@ -124,7 +124,7 @@ class ScheduleControllerTest {
     @Test
     void getLessonShouldReturnSchedule() throws Exception {
 
-        when(scheduleService.getScheduleById(1L)).thenReturn(new Schedule());
+        when(scheduleService.findById(1L)).thenReturn(new Schedule());
 
         mockMvc.perform(get("/schedule/lesson/{scheduleId}", 1L))
                 .andExpect(status().isOk());
@@ -138,7 +138,7 @@ class ScheduleControllerTest {
         scheduleDTO.setCourse(1L);
         scheduleDTO.setGroup(1L);
 
-        when(teacherService.findByUserId(scheduleDTO.getTeacher())).thenReturn(new Teacher());
+        when(teacherService.findById(scheduleDTO.getTeacher())).thenReturn(new Teacher());
         when(courseService.findById(scheduleDTO.getCourse())).thenReturn(new Course());
         when(groupService.findById(scheduleDTO.getGroup())).thenReturn(new Group());
 

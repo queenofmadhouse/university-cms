@@ -47,7 +47,7 @@ public class ScheduleController {
 
         Group group = studentService.findById(81).getGroup(); // #TODO: should be changed to REAL userId
 
-        Map<LocalDate, List<Schedule>> schedules = scheduleService.getScheduleByGroup(group, 30);
+        Map<LocalDate, List<Schedule>> schedules = scheduleService.findScheduleByGroup(group, 30);
         List<List<Day>> weeks = calendarService.prepareCalendar(schedules);
         List<LocalDate> month = calendarService.prepareDates(30);
         model.addAttribute("month", month);
@@ -58,9 +58,9 @@ public class ScheduleController {
     @GetMapping("/teacherschedule")
     public String getTeacherSchedule(Model model) {
 
-        Teacher teacher = teacherService.findByUserId(2L); // #TODO: should be changed to REAL userId
+        Teacher teacher = teacherService.findById(2L); // #TODO: should be changed to REAL userId
 
-        Map<LocalDate, List<Schedule>> schedules = scheduleService.getScheduleByTeacher(teacher, 30);
+        Map<LocalDate, List<Schedule>> schedules = scheduleService.findScheduleByTeacher(teacher, 30);
         List<List<Day>> weeks = calendarService.prepareCalendar(schedules);
         List<Course> courses = new ArrayList<>(teacher.getCourses());
         model.addAttribute("courses", courses);
@@ -86,7 +86,7 @@ public class ScheduleController {
     public List<LocalTime> getAvailableTimes(
             @PathVariable LocalDate selectedDate, @PathVariable Long teacherId, @PathVariable long groupId) {
 
-        Teacher teacher = teacherService.findByUserId(teacherId);
+        Teacher teacher = teacherService.findById(teacherId);
         Group group = groupService.findById(groupId);
 
         return scheduleService.findFreeTimeForTeacherAndGroup(selectedDate, teacher, group);
@@ -95,7 +95,7 @@ public class ScheduleController {
     @ResponseBody
     @GetMapping("/schedule/lesson/{scheduleId}")
     public Schedule getLesson(@PathVariable long scheduleId) {
-        return scheduleService.getScheduleById(scheduleId);
+        return scheduleService.findById(scheduleId);
     }
 
     @ResponseBody
@@ -103,7 +103,7 @@ public class ScheduleController {
     public ResponseEntity<ScheduleDTO> addLesson(@RequestBody ScheduleDTO scheduleDTO) {
 
         Schedule schedule = Schedule.builder()
-                .teacher(teacherService.findByUserId(scheduleDTO.getTeacher()))
+                .teacher(teacherService.findById(scheduleDTO.getTeacher()))
                 .course(courseService.findById(scheduleDTO.getCourse()))
                 .group(groupService.findById(scheduleDTO.getGroup()))
                 .lessonStart(scheduleDTO.getLessonStart())

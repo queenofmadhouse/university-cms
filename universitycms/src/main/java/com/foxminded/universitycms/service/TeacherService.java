@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface TeacherService {
 
-    Teacher findByUserId(long id);
+    Teacher findById(long id);
 
     void saveAll(List<Teacher> teachers);
 }

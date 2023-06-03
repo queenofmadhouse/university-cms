@@ -11,11 +11,11 @@ import java.util.Map;
 
 public interface ScheduleService {
 
-    Map<LocalDate, List<Schedule>> getScheduleByTeacher(Teacher teacher, int days);
+    Map<LocalDate, List<Schedule>> findScheduleByTeacher(Teacher teacher, int days);
 
-    Map<LocalDate, List<Schedule>> getScheduleByGroup(Group group, int days);
+    Map<LocalDate, List<Schedule>> findScheduleByGroup(Group group, int days);
 
-    Schedule getScheduleById(long id);
+    Schedule findById(long id);
 
     List<LocalTime> findFreeTimeForTeacherAndGroup(LocalDate date, Teacher teacher, Group group);
 

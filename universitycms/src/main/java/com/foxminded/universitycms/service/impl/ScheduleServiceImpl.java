@@ -35,7 +35,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public Map<LocalDate, List<Schedule>> getScheduleByTeacher(Teacher teacher, int days) {
+    public Map<LocalDate, List<Schedule>> findScheduleByTeacher(Teacher teacher, int days) {
         LocalDate today = LocalDate.now();
         LocalDateTime startDate = today.atStartOfDay();
         LocalDateTime endDate = today.plusDays(days).atTime(23, 59, 59);
@@ -47,7 +47,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public Map<LocalDate, List<Schedule>> getScheduleByGroup(Group group, int days) {
+    public Map<LocalDate, List<Schedule>> findScheduleByGroup(Group group, int days) {
         LocalDate today = LocalDate.now();
         LocalDateTime startDate = today.atStartOfDay();
         LocalDateTime endDate = today.plusDays(days).atTime(23, 59, 59);
@@ -59,8 +59,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public Schedule getScheduleById(long id) {
-        return scheduleRepository.getScheduleByScheduleId(id).orElseThrow(() ->
+    public Schedule findById(long id) {
+        return scheduleRepository.findById(id).orElseThrow(() ->
                 new DatabaseRuntimeException("Can't find schedule by id: " + id));
     }
 
