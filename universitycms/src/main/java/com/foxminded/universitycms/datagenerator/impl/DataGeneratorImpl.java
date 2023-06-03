@@ -17,9 +17,8 @@ import com.foxminded.universitycms.service.ScheduleService;
 import com.foxminded.universitycms.service.StudentService;
 import com.foxminded.universitycms.service.TeacherService;
 import lombok.RequiredArgsConstructor;
-import org.flywaydb.core.Flyway;
-import org.flywaydb.core.api.MigrationInfo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -38,49 +37,63 @@ public class DataGeneratorImpl implements DataGenerator {
     private final TeacherService teacherService;
     private final StudentService studentService;
     private final ScheduleService scheduleService;
-    private final Flyway flyway;
-
 
     @PostConstruct
+    @Transactional
     @Override
     public void generateAllData() {
-        if (databaseIsEmpty()) {
-            List<Course> courses = generateCourse();
-            List<Group> groups = generateGroup(courses);
-            List<Teacher> teachers = generateTeachers(courses);
-            List<Student> students = generateStudents(groups);
-            List<Schedule> schedules = generateSchedules(groups);
 
-            courseService.saveAll(courses);
-            groupService.saveAll(groups);
-            teacherService.saveAll(teachers);
-            studentService.saveAll(students);
-            scheduleService.saveAll(schedules);
+        if (databaseIsEmpty()) {
+
+            generateCourse();
+            generateGroup();
+            generateTeachers();
+            generateStudents();
+            generateSchedules();
         }
     }
 
-    private List<Course> generateCourse() {
-        return courseGenerator.generateData();
+    private void generateCourse() {
+        List<Course> courses = courseGenerator.generateData();
+        courseService.saveAll(courses);
     }
 
-    private List<Group> generateGroup(List<Course> courses) {
-        return groupGenerator.generateData(courses);
+    private void generateGroup() {
+        List<Course> courses = courseService.findAll();
+        List<Group> groups = groupGenerator.generateData(courses);
+        groupService.saveAll(groups);
     }
 
-    private List<Teacher> generateTeachers(List<Course> courses) {
-        return teacherGenerator.generateData(courses);
+    private void generateTeachers() {
+        List<Course> courses = courseService.findAll();
+        List<Teacher> teachers = teacherGenerator.generateData(courses);
+        teacherService.saveAll(teachers);
     }
 
-    private List<Student> generateStudents(List<Group> groups) {
-        return studentsGenerator.generateData(groups);
+    private void generateStudents() {
+        List<Group> groups = groupService.findAll();
+        List<Student> students = studentsGenerator.generateData(groups);
+        studentService.saveAll(students);
     }
 
-    private List<Schedule> generateSchedules(List<Group> groups) {
-        return scheduleGenerator.generateData(groups);
+    private void generateSchedules() {
+        List<Group> groups = groupService.findAll();
+        List<Schedule> schedules = scheduleGenerator.generateData(groups);
+        scheduleService.saveAll(schedules);
     }
 
     private boolean databaseIsEmpty() {
-        MigrationInfo[] migrationInfos = flyway.info().all();
-        return migrationInfos.length == 0;
+
+        boolean isCoursesEmpty = courseService.isTableEmpty();
+        boolean isGroupsEmpty = groupService.isTableEmpty();
+        boolean isTeachersEmpty = teacherService.isTableEmpty();
+        boolean isStudentsEmpty = studentService.isTableEmpty();
+        boolean isScheduleEmpty = scheduleService.isTableEmpty();
+
+        return isCoursesEmpty &&
+                isGroupsEmpty &&
+                isTeachersEmpty &&
+                isStudentsEmpty &&
+                isScheduleEmpty;
     }
 }
