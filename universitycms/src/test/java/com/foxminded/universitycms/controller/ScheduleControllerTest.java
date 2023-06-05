@@ -64,10 +64,10 @@ class ScheduleControllerTest {
     @Test
     void getStudentScheduleShouldReturnStudentScheduleView() throws Exception {
 
-        Group group = new Group();
+        long studentId = 81L;
 
-        when(studentService.findById(81)).thenReturn(new Student());
-        when(scheduleService.findScheduleByGroup(group, 30)).thenReturn(new HashMap<>());
+        when(studentService.findById(studentId)).thenReturn(new Student());
+        when(scheduleService.findScheduleByStudent(studentId, 30)).thenReturn(new HashMap<>());
         when(calendarService.prepareCalendar(new HashMap<>())).thenReturn(new ArrayList<>());
         when(calendarService.prepareDates(30)).thenReturn(new ArrayList<>());
 
@@ -79,8 +79,10 @@ class ScheduleControllerTest {
     @Test
     void getTeacherScheduleShouldReturnTeacherScheduleView() throws Exception {
 
-        when(teacherService.findById(2L)).thenReturn(teacher);
-        when(scheduleService.findScheduleByTeacher(teacher, 30)).thenReturn(new HashMap<>());
+        long teacherId = 2L;
+
+        when(teacherService.findById(teacherId)).thenReturn(teacher);
+        when(scheduleService.findScheduleByTeacher(teacherId, 30)).thenReturn(new HashMap<>());
         when(calendarService.prepareCalendar(new HashMap<>())).thenReturn(new ArrayList<>());
         when(teacher.getCourses()).thenReturn(new HashSet<>());
 

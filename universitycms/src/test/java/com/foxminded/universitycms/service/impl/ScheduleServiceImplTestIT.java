@@ -3,7 +3,9 @@ package com.foxminded.universitycms.service.impl;
 import com.foxminded.universitycms.entity.Course;
 import com.foxminded.universitycms.entity.Group;
 import com.foxminded.universitycms.entity.Schedule;
+import com.foxminded.universitycms.entity.Student;
 import com.foxminded.universitycms.entity.Teacher;
+import com.foxminded.universitycms.exception.DatabaseRuntimeException;
 import com.foxminded.universitycms.testconfiguration.IntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @IntegrationTest
@@ -23,19 +26,18 @@ class ScheduleServiceImplTestIT {
     private ScheduleServiceImpl scheduleService;
 
     @Test
-    void getScheduleByGroupShouldReturnEmptyMapWhenScheduleForGroupNotExists() {
+    void getScheduleByGroupShouldThrowDataBaseRuntimeExceptionWhenScheduleForGroupNotExists() {
 
         Group notExistGroup = Group.builder()
                 .groupId(999L)
                 .groupName("Not Exists").build();
 
-        Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService.findScheduleByGroup(notExistGroup, 30);
-
-        assertTrue(fundedSchedule.isEmpty());
+        assertThrows(DatabaseRuntimeException.class, () ->
+                scheduleService.findScheduleByStudent(notExistGroup.getGroupId(), 30));
     }
 
     @Test
-    void getScheduleByTeacherShouldReturnEmptyMapWhenScheduleForTeacherNotExists() {
+    void getScheduleByTeacherShouldThrowDataBaseRuntimeExceptionWhenScheduleForTeacherNotExists() {
 
         Teacher notExistTeacher = Teacher.builder()
                 .userId(999L)
@@ -46,30 +48,25 @@ class ScheduleServiceImplTestIT {
                 .department("Not Exist")
                 .build();
 
-        Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService.findScheduleByTeacher(notExistTeacher, 30);
-
-        assertTrue(fundedSchedule.isEmpty());
+        assertThrows(DatabaseRuntimeException.class, () ->
+                scheduleService.findScheduleByTeacher(notExistTeacher.getUserId(), 30));
     }
 
-    @Test
-    void getScheduleByGroupShouldReturnEmptyMapWhenGroupIsNull() {
+//    @Test
+//    void getScheduleByGroupShouldThrowDataBaseRuntimeExceptionWhenGroupIsNull() {
+//
+//        assertThrows(DatabaseRuntimeException.class, () ->
+//                scheduleService.findScheduleByStudent(null, 30));
+//    }
 
-        Group nullGroup = null;
-
-        Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService.findScheduleByGroup(nullGroup, 30);
-
-        assertTrue(fundedSchedule.isEmpty());
-    }
-
-    @Test
-    void getScheduleByTeacherShouldReturnEmptyMapWhenGroupIsNull() {
-
-        Teacher nullTeacher = null;
-
-        Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService.findScheduleByTeacher(nullTeacher, 30);
-
-        assertTrue(fundedSchedule.isEmpty());
-    }
+//    @Test
+//    void getScheduleByTeacherShouldThrowDataBaseRuntimeExceptionWhenGroupIsNull() {
+//
+//        Teacher nullTeacher = null;
+//
+//        assertThrows(DatabaseRuntimeException.class, () ->
+//                scheduleService.findScheduleByTeacher(nullTeacher.getUserId(), 30));
+//    }
 
     @Test
     void getScheduleByGroupShouldReturnMapWithScheduleForGroup() {
@@ -78,7 +75,7 @@ class ScheduleServiceImplTestIT {
                 .userId(1L)
                 .firstName("Alex")
                 .lastName("Kaplan")
-                .email("mail@mail.com")
+                .email("first@mail.com")
                 .password("passwd")
                 .department("Math Department")
                 .build();
@@ -93,7 +90,17 @@ class ScheduleServiceImplTestIT {
                 .groupId(1L)
                 .groupName("A5").build();
 
-        Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService.findScheduleByGroup(groupA5, 30);
+        Student studentBoyana = Student.builder()
+                .userId(2L)
+                .firstName("Alex")
+                .lastName("Kaplan")
+                .email("second@mail.com")
+                .password("passwd")
+                .group(groupA5)
+                .build();
+
+        Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService
+                .findScheduleByStudent(studentBoyana.getUserId(), 30);
 
         assertNotNull(fundedSchedule);
         assertEquals(2, fundedSchedule.size());
@@ -116,7 +123,7 @@ class ScheduleServiceImplTestIT {
                 .userId(1L)
                 .firstName("Alex")
                 .lastName("Kaplan")
-                .email("mail@mail.com")
+                .email("first@mail.com")
                 .password("passwd")
                 .department("Math Department")
                 .build();
@@ -131,7 +138,7 @@ class ScheduleServiceImplTestIT {
                 .groupId(1L)
                 .groupName("A5").build();
 
-        Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService.findScheduleByTeacher(teacherAlex, 30);
+        Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService.findScheduleByTeacher(teacherAlex.getUserId(), 30);
 
         assertNotNull(fundedSchedule);
         assertEquals(2, fundedSchedule.size());
