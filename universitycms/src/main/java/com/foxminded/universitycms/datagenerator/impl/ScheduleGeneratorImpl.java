@@ -6,6 +6,7 @@ import com.foxminded.universitycms.entity.Group;
 import com.foxminded.universitycms.entity.Schedule;
 import com.foxminded.universitycms.entity.Teacher;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
 
     private static final Random random = new Random();
 
+    @Transactional
     @Override
     public List<Schedule> generateData(List<Group> groups) {
 

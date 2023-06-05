@@ -6,6 +6,7 @@ import com.foxminded.universitycms.entity.Group;
 import com.github.javafaker.Faker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,6 +22,7 @@ public class GroupGeneratorImpl implements GroupGenerator {
     private final Faker faker = new Faker();
     private final int amountOfGroups;
 
+    @Transactional
     @Override
     public List<Group> generateData(List<Course> courses) {
 

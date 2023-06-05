@@ -53,30 +53,35 @@ public class DataGeneratorImpl implements DataGenerator {
         }
     }
 
-    private void generateCourse() {
+    @Transactional
+    public void generateCourse() {
         List<Course> courses = courseGenerator.generateData();
         courseService.saveAll(courses);
     }
 
-    private void generateGroup() {
+    @Transactional
+    public void generateGroup() {
         List<Course> courses = courseService.findAll();
         List<Group> groups = groupGenerator.generateData(courses);
         groupService.saveAll(groups);
     }
 
-    private void generateTeachers() {
+    @Transactional
+    public void generateTeachers() {
         List<Course> courses = courseService.findAll();
         List<Teacher> teachers = teacherGenerator.generateData(courses);
         teacherService.saveAll(teachers);
     }
 
-    private void generateStudents() {
+    @Transactional
+    public void generateStudents() {
         List<Group> groups = groupService.findAll();
         List<Student> students = studentsGenerator.generateData(groups);
         studentService.saveAll(students);
     }
 
-    private void generateSchedules() {
+    @Transactional
+    public void generateSchedules() {
         List<Group> groups = groupService.findAll();
         List<Schedule> schedules = scheduleGenerator.generateData(groups);
         scheduleService.saveAll(schedules);
