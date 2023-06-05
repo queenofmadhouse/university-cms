@@ -17,7 +17,7 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long> {
     @EntityGraph(attributePaths = {"courses"})
     List<Teacher> findAll();
 
-    @Query("SELECT c FROM Course c WHERE c.teachers = :teacher")
+    @Query("SELECT c FROM Course c WHERE :teacher MEMBER OF c.teachers")
     List<Course> findAllCoursesRelatedToTeacher(Teacher teacher);
 
     Optional<Teacher> findByFirstName(String firstName);
