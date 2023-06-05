@@ -3,6 +3,7 @@ package com.foxminded.universitycms.datagenerator.impl;
 import com.foxminded.universitycms.datagenerator.CourseGenerator;
 import com.foxminded.universitycms.entity.Course;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -27,7 +28,9 @@ public class CourseGeneratorImpl implements CourseGenerator {
             "collaboration", "communication", "innovation", "creativity", "research"
     };
     private static final Random random = new Random();
-    private final int amountOfCourses;
+
+    @Value("${app.constants.generator.amount-of-courses}")
+    private int amountOfCourses;
 
     @Override
     public List<Course> generateData() {

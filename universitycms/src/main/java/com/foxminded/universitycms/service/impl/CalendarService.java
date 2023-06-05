@@ -2,7 +2,8 @@ package com.foxminded.universitycms.service.impl;
 
 import com.foxminded.universitycms.entity.Day;
 import com.foxminded.universitycms.entity.Schedule;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -11,11 +12,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@RequiredArgsConstructor
+@Service
 public class CalendarService {
 
-    private final int amountOfDays;
-    private final int weekSize;
+    @Value("${app.constants.calendar.amount-of-days}")
+    private int amountOfDays;
+
+    @Value("${app.constants.calendar.week-size}")
+    private int weekSize;
 
     public List<List<Day>> prepareCalendar(Map<LocalDate, List<Schedule>> scheduleMap) {
         LocalDate startDate = LocalDate.now();

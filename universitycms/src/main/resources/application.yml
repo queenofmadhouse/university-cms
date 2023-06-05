@@ -11,3 +11,13 @@ spring:
     hikari:
       minimum-idle: 1
       maximum-pool-size: 5
+app:
+  constants:
+    calendar:
+      amount-of-days: 30
+      week-size: 6
+    generator:
+      amount-of-teachers: 40
+      amount-of-students: 400
+      amount-of-groups: 30
+      amount-of-courses: 20

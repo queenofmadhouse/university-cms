@@ -5,6 +5,7 @@ import com.foxminded.universitycms.entity.Course;
 import com.foxminded.universitycms.entity.Group;
 import com.github.javafaker.Faker;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +21,9 @@ public class GroupGeneratorImpl implements GroupGenerator {
 
     private static final Random random = new Random();
     private final Faker faker = new Faker();
-    private final int amountOfGroups;
+
+    @Value("${app.constants.generator.amount-of-groups}")
+    private int amountOfGroups;
 
     @Transactional
     @Override

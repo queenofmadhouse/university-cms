@@ -5,6 +5,7 @@ import com.foxminded.universitycms.entity.Group;
 import com.foxminded.universitycms.entity.Student;
 import com.github.javafaker.Faker;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -18,7 +19,9 @@ public class StudentsGeneratorImpl implements StudentsGenerator {
 
     private static final Random random = new Random();
     private static final Faker fakeValuesService = new Faker();
-    private final int amountOfStudents;
+
+    @Value("${app.constants.generator.amount-of-students}")
+    private int amountOfStudents;
 
     public List<Student> generateData(List<Group> groups) {
 
