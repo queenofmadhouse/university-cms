@@ -20,15 +20,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-//@DataJpaTest(includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
-////        ScheduleRepository.class,
-////        ScheduleServiceImpl.class,
-////        CourseRepository.class,
-////        GroupRepository.class,
-////        StudentServiceImpl.class,
-////        TeacherServiceImpl.class,
-//
-//}))
 @DataJpaTest
 @ComponentScan(basePackages = {"com.foxminded.universitycms.repository", "com.foxminded.universitycms.service.impl"})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
