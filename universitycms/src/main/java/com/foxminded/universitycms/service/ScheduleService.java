@@ -3,6 +3,7 @@ package com.foxminded.universitycms.service;
 import com.foxminded.universitycms.entity.Group;
 import com.foxminded.universitycms.entity.Schedule;
 import com.foxminded.universitycms.entity.Teacher;
+import com.foxminded.universitycms.entity.dto.ScheduleDTO;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -19,7 +20,7 @@ public interface ScheduleService {
 
     List<LocalTime> findFreeTimeForTeacherAndGroup(LocalDate date, Teacher teacher, Group group);
 
-    void save(Schedule schedule);
+    void save(ScheduleDTO scheduleDTO);
 
     void saveAll(List<Schedule> schedules);
 

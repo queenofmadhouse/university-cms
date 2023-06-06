@@ -2,7 +2,9 @@ package com.foxminded.universitycms.service.impl;
 
 import com.foxminded.universitycms.entity.Group;
 import com.foxminded.universitycms.entity.Schedule;
+import com.foxminded.universitycms.converter.ScheduleConverter;
 import com.foxminded.universitycms.entity.Teacher;
+import com.foxminded.universitycms.entity.dto.ScheduleDTO;
 import com.foxminded.universitycms.exception.DatabaseRuntimeException;
 import com.foxminded.universitycms.repository.ScheduleRepository;
 import com.foxminded.universitycms.service.ScheduleService;
@@ -27,9 +29,12 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final StudentService studentService;
     private final TeacherService teacherService;
+    private final ScheduleConverter scheduleConverter;
 
     @Override
-    public void save(Schedule schedule) {
+    public void save(ScheduleDTO scheduleDTO) {
+
+        Schedule schedule = scheduleConverter.convert(scheduleDTO);
         scheduleRepository.save(schedule);
     }
 

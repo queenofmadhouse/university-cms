@@ -100,17 +100,7 @@ public class ScheduleController {
     @PostMapping(path = "/add", consumes = "application/json", produces = "application/json")
     public ResponseEntity<ScheduleDTO> addLesson(@RequestBody ScheduleDTO scheduleDTO) {
 
-        Schedule schedule = Schedule.builder()
-                .teacher(teacherService.findById(scheduleDTO.getTeacher()))
-                .course(courseService.findById(scheduleDTO.getCourse()))
-                .group(groupService.findById(scheduleDTO.getGroup()))
-                .lessonStart(scheduleDTO.getLessonStart())
-                .lessonEnd(scheduleDTO.getLessonEnd())
-                .lessonDescription(scheduleDTO.getLessonDescription())
-                .build();
-
-        scheduleService.save(schedule);
-
+        scheduleService.save(scheduleDTO);
         return ResponseEntity.ok(scheduleDTO);
     }
 }

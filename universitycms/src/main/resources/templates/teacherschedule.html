@@ -99,7 +99,7 @@
             .then(lesson => {
                 console.log('Lesson:', lesson);
                 document.getElementById('lessonName').textContent = lesson.course.courseName;
-                document.getElementById('groupName').textContent = "Group: " + lesson.group.groupName;
+                document.getElementById('group').textContent = "Group: " + lesson.group.groupName;
                 document.getElementById('startTime').textContent = "Lesson starts at: " + lesson.lessonStart;
                 document.getElementById('endTime').textContent = "Lesson ends at: " + lesson.lessonEnd;
                 document.getElementById('description').textContent = "Description: " + lesson.lessonDescription;
@@ -168,16 +168,17 @@
         const StartTime = document.getElementById('lessonStart').value;
         const lessonDescription = document.getElementById('lessonDescription').value;
 
-        const lessonStart = `${lessonDate}T${StartTime}`;
-        let date = new Date(lessonStart);
-        date.setMinutes(date.getMinutes() + 50);
-        const lessonEnd = date.toISOString().slice(0, 16);
+        const lessonStart = new Date(`${lessonDate}T${StartTime}`);
+        const lessonEnd = new Date(lessonStart.getTime() + 50*60000);  // Add 50 minutes in milliseconds
+
+        const lessonStartISO = `${lessonStart.getFullYear()}-${String(lessonStart.getMonth()+1).padStart(2, '0')}-${String(lessonStart.getDate()).padStart(2, '0')}T${String(lessonStart.getHours()).padStart(2, '0')}:${String(lessonStart.getMinutes()).padStart(2, '0')}:${String(lessonStart.getSeconds()).padStart(2, '0')}`;
+        const lessonEndISO = `${lessonEnd.getFullYear()}-${String(lessonEnd.getMonth()+1).padStart(2, '0')}-${String(lessonEnd.getDate()).padStart(2, '0')}T${String(lessonEnd.getHours()).padStart(2, '0')}:${String(lessonEnd.getMinutes()).padStart(2, '0')}:${String(lessonEnd.getSeconds()).padStart(2, '0')}`;
 
         const lessonData = {
             course,
             group,
-            lessonStart,
-            lessonEnd,
+            lessonStart: lessonStartISO,
+            lessonEnd: lessonEndISO,
             lessonDescription,
             teacher: 2  // #TODO should be changed to REAL teacher id
         };
