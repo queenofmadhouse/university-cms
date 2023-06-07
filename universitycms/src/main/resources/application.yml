@@ -20,10 +20,3 @@ app:
     calendar:
       amount-of-days: 30
       week-size: 6
-    generator:
-      amount-of-teachers: 40
-      amount-of-students: 400
-      amount-of-groups: 30
-      amount-of-courses: 20
-      amount-of-classrooms: 100
-      classroom-capacity: 30

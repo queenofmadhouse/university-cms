@@ -34,9 +34,4 @@ public class TeacherServiceImpl implements TeacherService {
     public void saveAll(List<Teacher> teachers) {
         teacherRepository.saveAll(teachers);
     }
-
-    @Override
-    public boolean isTableEmpty() {
-        return teacherRepository.count() == 0;
-    }
 }

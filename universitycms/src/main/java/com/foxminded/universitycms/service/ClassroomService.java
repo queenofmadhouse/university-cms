@@ -9,6 +9,4 @@ public interface ClassroomService {
     void saveAll(List<Classroom> classrooms);
 
     List<Classroom> findAll();
-
-    boolean isTableEmpty();
 }

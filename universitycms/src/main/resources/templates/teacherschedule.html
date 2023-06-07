@@ -28,6 +28,7 @@
 
 <div id="lessonDetails" style="display: none;">
     <h3 id="lessonName"></h3>
+    <p id="audience"></p>
     <p id="group"></p>
     <p id="startTime"></p>
     <p id="endTime"></p>
@@ -100,6 +101,7 @@
                 console.log('Lesson:', lesson);
                 document.getElementById('lessonName').textContent = lesson.course.courseName;
                 document.getElementById('group').textContent = "Group: " + lesson.group.groupName;
+                document.getElementById('audience').textContent = "Audience: " + lesson.audienceId;
                 document.getElementById('startTime').textContent = "Lesson starts at: " + lesson.lessonStart;
                 document.getElementById('endTime').textContent = "Lesson ends at: " + lesson.lessonEnd;
                 document.getElementById('description').textContent = "Description: " + lesson.lessonDescription;

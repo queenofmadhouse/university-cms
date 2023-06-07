@@ -23,9 +23,4 @@ public class ClassroomServiceImpl implements ClassroomService {
     public List<Classroom> findAll() {
         return classroomRepository.findAll();
     }
-
-    @Override
-    public boolean isTableEmpty() {
-        return classroomRepository.count() == 0;
-    }
 }

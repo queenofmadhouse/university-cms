@@ -14,6 +14,4 @@ public interface CourseService {
     Course findById(Long id);
 
     void saveAll(List<Course> courses);
-
-    boolean isTableEmpty();
 }

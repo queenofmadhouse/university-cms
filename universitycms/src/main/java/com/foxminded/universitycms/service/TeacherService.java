@@ -12,6 +12,4 @@ public interface TeacherService {
     Teacher findById(long id);
 
     void saveAll(List<Teacher> teachers);
-
-    boolean isTableEmpty();
 }

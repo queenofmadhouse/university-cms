@@ -23,7 +23,4 @@ public interface ScheduleService {
     void save(ScheduleDTO scheduleDTO);
 
     void saveAll(List<Schedule> schedules);
-
-    boolean isTableEmpty();
-
 }

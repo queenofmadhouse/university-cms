@@ -9,6 +9,4 @@ public interface StudentService {
     Student findById(long id);
 
     void saveAll(List<Student> students);
-
-    boolean isTableEmpty();
 }

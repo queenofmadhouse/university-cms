@@ -44,11 +44,6 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public boolean isTableEmpty() {
-        return scheduleRepository.count() == 0;
-    }
-
-    @Override
     public Map<LocalDate, List<Schedule>> findScheduleByTeacher(Long teacherId, int days) {
 
         Teacher teacher = teacherService.findById(teacherId);

@@ -36,9 +36,4 @@ public class CourseServiceImpl implements CourseService {
     public void saveAll(List<Course> courses) {
         courseRepository.saveAll(courses);
     }
-
-    @Override
-    public boolean isTableEmpty() {
-        return courseRepository.count() == 0;
-    }
 }
