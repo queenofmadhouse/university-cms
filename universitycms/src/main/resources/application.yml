@@ -25,3 +25,5 @@ app:
       amount-of-students: 400
       amount-of-groups: 30
       amount-of-courses: 20
+      amount-of-classrooms: 100
+      classroom-capacity: 30

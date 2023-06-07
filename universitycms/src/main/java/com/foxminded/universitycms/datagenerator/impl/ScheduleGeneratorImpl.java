@@ -1,6 +1,7 @@
 package com.foxminded.universitycms.datagenerator.impl;
 
 import com.foxminded.universitycms.datagenerator.ScheduleGenerator;
+import com.foxminded.universitycms.entity.Classroom;
 import com.foxminded.universitycms.entity.Course;
 import com.foxminded.universitycms.entity.Group;
 import com.foxminded.universitycms.entity.Schedule;
@@ -22,7 +23,7 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
 
     @Transactional
     @Override
-    public List<Schedule> generateData(List<Group> groups) {
+    public List<Schedule> generateData(List<Group> groups, List<Classroom> classrooms) {
 
         List<Schedule> generatedSchedule = new ArrayList<>();
 
@@ -38,6 +39,7 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
 
                     Course randomCourse = getRandomCourse(group.getCourses());
                     Teacher randomTeacher = getRandomTeacher(randomCourse);
+                    Classroom randomClassroom = getRandomClassroom(classrooms);
                     LocalDateTime lessonStart = date.atStartOfDay().plusHours(8).plusHours(n);
                     LocalDateTime lessonEnd = lessonStart.plusMinutes(50);
 
@@ -45,6 +47,7 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
                             .teacher(randomTeacher)
                             .course(randomCourse)
                             .group(group)
+                            .classroomId(randomClassroom)
                             .lessonStart(lessonStart)
                             .lessonEnd(lessonEnd)
                             .lessonDescription("-")
@@ -67,8 +70,14 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
     }
 
     private Teacher getRandomTeacher(Course course) {
+
         List<Teacher> teachersRelatedToCourse = new ArrayList<>(course.getTeachers());
 
         return teachersRelatedToCourse.get(random.nextInt(teachersRelatedToCourse.size()));
+    }
+
+    private Classroom getRandomClassroom(List<Classroom> classrooms) {
+
+        return classrooms.get(random.nextInt(classrooms.size()));
     }
 }

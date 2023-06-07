@@ -46,6 +46,10 @@ public class Schedule {
     @JoinColumn(name = "group_id")
     private Group group;
 
+    @OneToOne
+    @JoinColumn(name = "classroom_id")
+    private Classroom classroomId;
+
     @Column(name = "lesson_start")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime lessonStart;

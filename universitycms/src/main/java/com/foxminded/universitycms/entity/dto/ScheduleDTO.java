@@ -21,6 +21,8 @@ public class ScheduleDTO {
 
     private Long group;
 
+    private Long classroomId;
+
     private LocalDateTime lessonStart;
 
     private LocalDateTime lessonEnd;

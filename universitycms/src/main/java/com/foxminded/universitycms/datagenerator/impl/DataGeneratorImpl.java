@@ -1,16 +1,19 @@
 package com.foxminded.universitycms.datagenerator.impl;
 
+import com.foxminded.universitycms.datagenerator.ClassroomGenerator;
 import com.foxminded.universitycms.datagenerator.CourseGenerator;
 import com.foxminded.universitycms.datagenerator.DataGenerator;
 import com.foxminded.universitycms.datagenerator.GroupGenerator;
 import com.foxminded.universitycms.datagenerator.ScheduleGenerator;
 import com.foxminded.universitycms.datagenerator.StudentsGenerator;
 import com.foxminded.universitycms.datagenerator.TeacherGenerator;
+import com.foxminded.universitycms.entity.Classroom;
 import com.foxminded.universitycms.entity.Course;
 import com.foxminded.universitycms.entity.Group;
 import com.foxminded.universitycms.entity.Schedule;
 import com.foxminded.universitycms.entity.Student;
 import com.foxminded.universitycms.entity.Teacher;
+import com.foxminded.universitycms.service.ClassroomService;
 import com.foxminded.universitycms.service.CourseService;
 import com.foxminded.universitycms.service.GroupService;
 import com.foxminded.universitycms.service.ScheduleService;
@@ -29,11 +32,13 @@ public class DataGeneratorImpl implements DataGenerator {
 
     private final CourseGenerator courseGenerator;
     private final GroupGenerator groupGenerator;
+    private final ClassroomGenerator classroomGenerator;
     private final TeacherGenerator teacherGenerator;
     private final StudentsGenerator studentsGenerator;
     private final ScheduleGenerator scheduleGenerator;
     private final CourseService courseService;
     private final GroupService groupService;
+    private final ClassroomService classroomService;
     private final TeacherService teacherService;
     private final StudentService studentService;
     private final ScheduleService scheduleService;
@@ -47,6 +52,7 @@ public class DataGeneratorImpl implements DataGenerator {
 
             generateCourse();
             generateGroup();
+            generateClassrooms();
             generateTeachers();
             generateStudents();
             generateSchedules();
@@ -67,6 +73,12 @@ public class DataGeneratorImpl implements DataGenerator {
     }
 
     @Transactional
+    public void generateClassrooms() {
+        List<Classroom> classrooms = classroomGenerator.generateData();
+        classroomService.saveAll(classrooms);
+    }
+
+    @Transactional
     public void generateTeachers() {
         List<Course> courses = courseService.findAll();
         List<Teacher> teachers = teacherGenerator.generateData(courses);
@@ -83,7 +95,8 @@ public class DataGeneratorImpl implements DataGenerator {
     @Transactional
     public void generateSchedules() {
         List<Group> groups = groupService.findAll();
-        List<Schedule> schedules = scheduleGenerator.generateData(groups);
+        List<Classroom> classrooms = classroomService.findAll();
+        List<Schedule> schedules = scheduleGenerator.generateData(groups, classrooms);
         scheduleService.saveAll(schedules);
     }
 
@@ -91,12 +104,14 @@ public class DataGeneratorImpl implements DataGenerator {
 
         boolean isCoursesEmpty = courseService.isTableEmpty();
         boolean isGroupsEmpty = groupService.isTableEmpty();
+        boolean isClassroomsEmpty = classroomService.isTableEmpty();
         boolean isTeachersEmpty = teacherService.isTableEmpty();
         boolean isStudentsEmpty = studentService.isTableEmpty();
         boolean isScheduleEmpty = scheduleService.isTableEmpty();
 
         return isCoursesEmpty &&
                 isGroupsEmpty &&
+                isClassroomsEmpty &&
                 isTeachersEmpty &&
                 isStudentsEmpty &&
                 isScheduleEmpty;

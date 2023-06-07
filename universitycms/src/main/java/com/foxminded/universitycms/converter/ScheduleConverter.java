@@ -1,5 +1,6 @@
 package com.foxminded.universitycms.converter;
 
+import com.foxminded.universitycms.entity.Classroom;
 import com.foxminded.universitycms.entity.Course;
 import com.foxminded.universitycms.entity.Group;
 import com.foxminded.universitycms.entity.Schedule;
@@ -17,6 +18,7 @@ public class ScheduleConverter {
                 .teacher(Teacher.builder().userId(scheduleDTO.getTeacher()).build())
                 .course(Course.builder().courseId(scheduleDTO.getCourse()).build())
                 .group(Group.builder().groupId(scheduleDTO.getGroup()).build())
+                .classroomId(Classroom.builder().classroomId(scheduleDTO.getClassroomId()).build())
                 .lessonStart(scheduleDTO.getLessonStart())
                 .lessonEnd(scheduleDTO.getLessonEnd())
                 .lessonDescription(scheduleDTO.getLessonDescription())
