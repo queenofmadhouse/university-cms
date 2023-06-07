@@ -1,18 +1,22 @@
 package com.foxminded.universitycms.controller;
 
+import com.foxminded.universitycms.entity.Classroom;
 import com.foxminded.universitycms.entity.Course;
 import com.foxminded.universitycms.entity.Day;
 import com.foxminded.universitycms.entity.Group;
 import com.foxminded.universitycms.entity.Schedule;
 import com.foxminded.universitycms.entity.Teacher;
+import com.foxminded.universitycms.entity.dto.ClassroomDTO;
 import com.foxminded.universitycms.entity.dto.GroupDTO;
 import com.foxminded.universitycms.entity.dto.ScheduleDTO;
+import com.foxminded.universitycms.service.ClassroomService;
 import com.foxminded.universitycms.service.CourseService;
 import com.foxminded.universitycms.service.GroupService;
 import com.foxminded.universitycms.service.ScheduleService;
 import com.foxminded.universitycms.service.TeacherService;
 import com.foxminded.universitycms.service.impl.CalendarService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +37,14 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Controller
+@Slf4j
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
     private final TeacherService teacherService;
     private final GroupService groupService;
     private final CourseService courseService;
+    private final ClassroomService classroomService;
     private final CalendarService calendarService;
 
     @GetMapping("/studentschedule")
@@ -91,6 +98,21 @@ public class ScheduleController {
     }
 
     @ResponseBody
+    @GetMapping("/getFreeClassrooms/{lessonStart}")
+    public List<ClassroomDTO> getAvailableClassrooms(@PathVariable LocalDateTime lessonStart) {
+
+        log.info("try to find free classrooms");
+
+        List<Classroom> foundFreeClassrooms = classroomService.findFreeClassrooms(lessonStart);
+
+        log.info("foundFreeClassrooms: " + foundFreeClassrooms);
+
+        return foundFreeClassrooms.stream()
+                .map(classroom -> new ClassroomDTO(classroom.getClassroomId()))
+                .collect(Collectors.toList());
+    }
+
+    @ResponseBody
     @GetMapping("/schedule/lesson/{scheduleId}")
     public Schedule getLesson(@PathVariable long scheduleId) {
         return scheduleService.findById(scheduleId);
@@ -100,7 +122,11 @@ public class ScheduleController {
     @PostMapping(path = "/add", consumes = "application/json", produces = "application/json")
     public ResponseEntity<ScheduleDTO> addLesson(@RequestBody ScheduleDTO scheduleDTO) {
 
+        log.info("trying to save: " + scheduleDTO);
+
         scheduleService.save(scheduleDTO);
+
+        log.info(scheduleDTO.toString());
         return ResponseEntity.ok(scheduleDTO);
     }
 }

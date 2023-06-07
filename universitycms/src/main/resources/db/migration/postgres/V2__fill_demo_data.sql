@@ -613,3 +613,13 @@ INSERT INTO university.schedule (id, user_id, course_id, group_id, classroom_id,
 INSERT INTO university.schedule (id, user_id, course_id, group_id, classroom_id, lesson_start, lesson_end, lesson_description) VALUES (475, 5, 10, 5, 24, '2023-07-07 09:00:00', '2023-07-07 09:50:00', '-');
 INSERT INTO university.schedule (id, user_id, course_id, group_id, classroom_id, lesson_start, lesson_end, lesson_description) VALUES (476, 5, 10, 5, 7, '2023-07-07 10:00:00', '2023-07-07 10:50:00', '-');
 INSERT INTO university.schedule (id, user_id, course_id, group_id, classroom_id, lesson_start, lesson_end, lesson_description) VALUES (477, 3, 7, 5, 1, '2023-07-07 11:00:00', '2023-07-07 11:50:00', '-');
+
+SELECT pg_catalog.setval('university.classrooms_classroom_id_seq', 39, true);
+
+SELECT pg_catalog.setval('university.courses_course_id_seq', 10, true);
+
+SELECT pg_catalog.setval('university.groups_courses_relation_id_seq', 17, true);
+
+SELECT pg_catalog.setval('university.groups_group_id_seq', 5, true);
+
+SELECT pg_catalog.setval('university.schedule_id_seq', 477, true);

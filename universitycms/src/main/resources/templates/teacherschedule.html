@@ -18,8 +18,8 @@
             <span class="date"
                   th:text="${day.getDate.getDayOfMonth()} + ' ' + ${day.getDate.getMonth().toString().toLowerCase()}"></span>
             <div th:each="lesson : ${day.getLessons}" th:if="${lesson != null}">
-                <span th:text="${lesson.getCourse().getCourseName}" th:data-id="${lesson.getScheduleId()}"
-                      onclick="showLessonDetails(this)" style="cursor:pointer"></span>
+                <span onclick="showLessonDetails(this)" style="cursor:pointer"
+                      th:data-id="${lesson.getScheduleId()}" th:text="${lesson.getCourse().getCourseName}"></span>
                 <span th:text="${#temporals.format(lesson.lessonStart, 'HH:mm')} + ' - ' + ${#temporals.format(lesson.lessonEnd, 'HH:mm')}"></span>
             </div>
         </td>
@@ -42,23 +42,28 @@
         <label for="courseName">Course Name:</label><br>
         <select id="courseName" name="courseName">
             <option value="">Please select...</option>
-            <option th:each="course : ${courses}" th:value="${course.getCourseId()}"
-                    th:text="${course.getCourseName()}"></option>
+            <option th:each="course : ${courses}" th:text="${course.getCourseName()}"
+                    th:value="${course.getCourseId()}"></option>
         </select><br>
         <label for="groupName">Group name:</label><br>
         <select id="groupName" name="groupName">
             <option value="">Please select...</option>
-            <option th:each="group : ${groups}" th:value="${group.getId()}" th:text="${group.getGroupName()}"></option>
+            <option th:each="group : ${groups}" th:text="${group.getGroupName()}" th:value="${group.getId()}"></option>
         </select><br>
         <label for="lessonDate">Lesson date:</label><br>
         <select id="lessonDate" name="lessonDate">
             <option value="">Please select...</option>
-            <option th:each="day : ${month}" th:value="${day}" th:text="${day}"></option>
+            <option th:each="day : ${month}" th:text="${day}" th:value="${day}"></option>
         </select><br>
         <label for="lessonStart">Lesson starts at:</label><br>
         <select id="lessonStart" name="lessonStart">
             <option value="">Please select...</option>
-            <option th:each="time : ${timeSlots}" th:value="${time}" th:text="${time}"></option>
+            <option th:each="time : ${timeSlots}" th:text="${time}" th:value="${time}"></option>
+        </select><br>
+        <label for="classroomId">Classroom:</label><br>
+        <select id="classroomId" name="classroom">
+            <option value="">Please select...</option>
+            <option th:each="classroom : ${freeClassrooms}" th:text="${classroom}" th:value="${classroom}"></option>
         </select><br>
         <label for="lessonDescription">Lesson Description:</label><br>
         <textarea id="lessonDescription" name="lessonDescription"></textarea><br>
@@ -71,10 +76,10 @@
     window.onload = function () {
         let startDate = new Date();
         let endDate = new Date();
-        endDate.setDate(startDate.getDate() + 30); // Adjust this for the range you want
+        endDate.setDate(startDate.getDate() + 30);
 
         let dateSelect = document.getElementById('lessonDate');
-        dateSelect.innerHTML = ''; // Clear any existing options
+        dateSelect.innerHTML = '';
 
         for (let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
             let option = document.createElement('option');
@@ -157,28 +162,63 @@
                     });
                 })
                 .catch(error => console.error('Error:', error));
-        }})
+        }
+    })
 </script>
 
 <script>
-    document.getElementById('add-lesson').addEventListener('submit', function(event) {
+    document.getElementById('lessonStart').addEventListener('change', function () {
+        const lessonDate = document.getElementById('lessonDate').value;
+        const StartTime = document.getElementById('lessonStart').value;
+
+        const lessonStart = new Date(`${lessonDate}T${StartTime}`);
+
+        const lessonStartISO = `${lessonStart.getFullYear()}-${String(lessonStart.getMonth() + 1).padStart(2, '0')}-${String(lessonStart.getDate()).padStart(2, '0')}T${String(lessonStart.getHours()).padStart(2, '0')}:${String(lessonStart.getMinutes()).padStart(2, '0')}:${String(lessonStart.getSeconds()).padStart(2, '0')}`;
+        console.log(lessonStartISO);
+
+        fetch(`/getFreeClassrooms/${lessonStartISO}`)  // Use backticks here
+            .then(response => response.json())
+            .then(data => {
+
+                let classroomSelect = document.getElementById('classroomId');
+
+                classroomSelect.innerHTML = '';
+
+                data.forEach(classRoom => {
+                    let option = document.createElement('option');
+                    option.value = classRoom.id;
+                    console.log(option.value);
+                    option.textContent = classRoom.id;
+                    console.log(option.textContent);
+                    classroomSelect.appendChild(option);
+                })
+            })
+            .catch(error => console.error('Error: ', error));
+    });
+</script>
+
+<script>
+    document.getElementById('add-lesson').addEventListener('submit', function (event) {
         event.preventDefault();
 
         const course = document.getElementById('courseName').value;
         const group = document.getElementById('groupName').value;
+        const classroom = document.getElementById('classroomId').value;
+        console.log(classroom)
         const lessonDate = document.getElementById('lessonDate').value;
         const StartTime = document.getElementById('lessonStart').value;
         const lessonDescription = document.getElementById('lessonDescription').value;
 
         const lessonStart = new Date(`${lessonDate}T${StartTime}`);
-        const lessonEnd = new Date(lessonStart.getTime() + 50*60000);  // Add 50 minutes in milliseconds
+        const lessonEnd = new Date(lessonStart.getTime() + 50 * 60000);  // Add 50 minutes in milliseconds
 
-        const lessonStartISO = `${lessonStart.getFullYear()}-${String(lessonStart.getMonth()+1).padStart(2, '0')}-${String(lessonStart.getDate()).padStart(2, '0')}T${String(lessonStart.getHours()).padStart(2, '0')}:${String(lessonStart.getMinutes()).padStart(2, '0')}:${String(lessonStart.getSeconds()).padStart(2, '0')}`;
-        const lessonEndISO = `${lessonEnd.getFullYear()}-${String(lessonEnd.getMonth()+1).padStart(2, '0')}-${String(lessonEnd.getDate()).padStart(2, '0')}T${String(lessonEnd.getHours()).padStart(2, '0')}:${String(lessonEnd.getMinutes()).padStart(2, '0')}:${String(lessonEnd.getSeconds()).padStart(2, '0')}`;
+        const lessonStartISO = `${lessonStart.getFullYear()}-${String(lessonStart.getMonth() + 1).padStart(2, '0')}-${String(lessonStart.getDate()).padStart(2, '0')}T${String(lessonStart.getHours()).padStart(2, '0')}:${String(lessonStart.getMinutes()).padStart(2, '0')}:${String(lessonStart.getSeconds()).padStart(2, '0')}`;
+        const lessonEndISO = `${lessonEnd.getFullYear()}-${String(lessonEnd.getMonth() + 1).padStart(2, '0')}-${String(lessonEnd.getDate()).padStart(2, '0')}T${String(lessonEnd.getHours()).padStart(2, '0')}:${String(lessonEnd.getMinutes()).padStart(2, '0')}:${String(lessonEnd.getSeconds()).padStart(2, '0')}`;
 
         const lessonData = {
             course,
             group,
+            classroom,
             lessonStart: lessonStartISO,
             lessonEnd: lessonEndISO,
             lessonDescription,

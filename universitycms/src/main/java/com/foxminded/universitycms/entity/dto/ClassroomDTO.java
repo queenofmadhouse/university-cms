@@ -9,8 +9,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class GroupDTO {
+public class ClassroomDTO {
 
-    private Long id;
-    private String name;
+    long id;
 }

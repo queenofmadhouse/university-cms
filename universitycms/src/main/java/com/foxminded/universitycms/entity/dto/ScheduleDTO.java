@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class ScheduleDTO {
 
     private Long scheduleId;
@@ -21,7 +23,7 @@ public class ScheduleDTO {
 
     private Long group;
 
-    private Long classroomId;
+    private Long classroom;
 
     private LocalDateTime lessonStart;
 

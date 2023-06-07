@@ -18,7 +18,7 @@ public class ScheduleConverter {
                 .teacher(Teacher.builder().userId(scheduleDTO.getTeacher()).build())
                 .course(Course.builder().courseId(scheduleDTO.getCourse()).build())
                 .group(Group.builder().groupId(scheduleDTO.getGroup()).build())
-                .classroomId(Classroom.builder().classroomId(scheduleDTO.getClassroomId()).build())
+                .classroomId(Classroom.builder().classroomId(scheduleDTO.getClassroom()).build())
                 .lessonStart(scheduleDTO.getLessonStart())
                 .lessonEnd(scheduleDTO.getLessonEnd())
                 .lessonDescription(scheduleDTO.getLessonDescription())

@@ -35,6 +35,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     public void save(ScheduleDTO scheduleDTO) {
 
         Schedule schedule = scheduleConverter.convert(scheduleDTO);
+
+        System.out.println(schedule);
         scheduleRepository.save(schedule);
     }
 
