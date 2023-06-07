@@ -28,7 +28,4 @@ public class Classroom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "classroom_id")
     private long classroomId;
-
-    @Column(name = "capacity")
-    private long capacity;
 }
