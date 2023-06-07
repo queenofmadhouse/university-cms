@@ -18,6 +18,8 @@ public interface ScheduleService {
 
     Schedule findById(long id);
 
+    void deleteById(long id);
+
     List<LocalTime> findFreeTimeForTeacherAndGroup(LocalDate date, Teacher teacher, Group group);
 
     void save(ScheduleDTO scheduleDTO);

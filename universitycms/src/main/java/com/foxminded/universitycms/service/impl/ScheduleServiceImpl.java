@@ -36,9 +36,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         Schedule schedule = scheduleConverter.convert(scheduleDTO);
 
-        System.out.println(schedule);
         scheduleRepository.save(schedule);
     }
+
+
 
     @Override
     public void saveAll(List<Schedule> schedules) {
@@ -77,6 +78,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     public Schedule findById(long id) {
         return scheduleRepository.findById(id).orElseThrow(() ->
                 new DatabaseRuntimeException("Can't find schedule by id: " + id));
+    }
+
+    @Override
+    public void deleteById(long id) {
+        scheduleRepository.deleteById(id);
     }
 
     @Override

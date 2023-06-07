@@ -11,6 +11,65 @@
 
 <h2>Your schedule for 30 days</h2>
 
+<button id="addLessonButton">Add Lesson</button>
+
+<div id="lessonDetails" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeLessonDetails">&times;</span>
+        <h2 id="lessonName"></h2>
+        <p id="classroom"></p>
+        <p id="group"></p>
+        <p id="startTime"></p>
+        <p id="endTime"></p>
+        <p id="description"></p>
+        <button id="deleteButton" style="display: none;">Delete Lesson</button>
+    </div>
+</div>
+
+<div id="addLessonModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeAddLesson">&times;</span>
+        <div class="add-lesson-form">
+            <h2>Add a new lesson</h2>
+
+            <form id="add-lesson">
+                <label for="courseName">Course Name:</label><br>
+                <select id="courseName" name="courseName">
+                    <option value="">Please select...</option>
+                    <option th:each="course : ${courses}" th:text="${course.getCourseName()}"
+                            th:value="${course.getCourseId()}"></option>
+                </select><br>
+                <label for="groupName">Group name:</label><br>
+                <select id="groupName" name="groupName">
+                    <option value="">Please select...</option>
+                    <option th:each="group : ${groups}" th:text="${group.getGroupName()}"
+                            th:value="${group.getId()}"></option>
+                </select><br>
+                <label for="lessonDate">Lesson date:</label><br>
+                <select id="lessonDate" name="lessonDate">
+                    <option value="">Please select...</option>
+                    <option th:each="day : ${month}" th:text="${day}" th:value="${day}"></option>
+                </select><br>
+                <label for="lessonStart">Lesson starts at:</label><br>
+                <select id="lessonStart" name="lessonStart">
+                    <option value="">Please select...</option>
+                    <option th:each="time : ${timeSlots}" th:text="${time}" th:value="${time}"></option>
+                </select><br>
+                <label for="classroomId">Classroom:</label><br>
+                <select id="classroomId" name="classroom">
+                    <option value="">Please select...</option>
+                    <option th:each="classroom : ${freeClassrooms}" th:text="${classroom}"
+                            th:value="${classroom}"></option>
+                </select><br>
+                <label for="lessonDescription">Lesson Description:</label><br>
+                <textarea id="lessonDescription" name="lessonDescription"></textarea><br>
+
+                <button id="submit" style="display: block;">Add Lesson</button>
+            </form>
+        </div>
+    </div>
+</div>
+
 <table>
     <tr th:each="week : ${weeks}">
         <td th:each="day : ${week}">
@@ -26,51 +85,26 @@
     </tr>
 </table>
 
-<div id="lessonDetails" style="display: none;">
-    <h3 id="lessonName"></h3>
-    <p id="classroom"></p>
-    <p id="group"></p>
-    <p id="startTime"></p>
-    <p id="endTime"></p>
-    <p id="description"></p>
-</div>
+<script>
+    let addLessonButton = document.getElementById('addLessonButton');
+    let addLessonModal = document.getElementById('addLessonModal');
+    let closeAddLessonFormButton = document.getElementById('closeAddLesson');
+    let lessonDetails = document.getElementById('lessonDetails');
+    let closeLessonDetailsButton = document.getElementById('closeLessonDetails');
 
-<div class="add-lesson-form">
-    <h2>Add a new lesson</h2>
 
-    <form id="add-lesson">
-        <label for="courseName">Course Name:</label><br>
-        <select id="courseName" name="courseName">
-            <option value="">Please select...</option>
-            <option th:each="course : ${courses}" th:text="${course.getCourseName()}"
-                    th:value="${course.getCourseId()}"></option>
-        </select><br>
-        <label for="groupName">Group name:</label><br>
-        <select id="groupName" name="groupName">
-            <option value="">Please select...</option>
-            <option th:each="group : ${groups}" th:text="${group.getGroupName()}" th:value="${group.getId()}"></option>
-        </select><br>
-        <label for="lessonDate">Lesson date:</label><br>
-        <select id="lessonDate" name="lessonDate">
-            <option value="">Please select...</option>
-            <option th:each="day : ${month}" th:text="${day}" th:value="${day}"></option>
-        </select><br>
-        <label for="lessonStart">Lesson starts at:</label><br>
-        <select id="lessonStart" name="lessonStart">
-            <option value="">Please select...</option>
-            <option th:each="time : ${timeSlots}" th:text="${time}" th:value="${time}"></option>
-        </select><br>
-        <label for="classroomId">Classroom:</label><br>
-        <select id="classroomId" name="classroom">
-            <option value="">Please select...</option>
-            <option th:each="classroom : ${freeClassrooms}" th:text="${classroom}" th:value="${classroom}"></option>
-        </select><br>
-        <label for="lessonDescription">Lesson Description:</label><br>
-        <textarea id="lessonDescription" name="lessonDescription"></textarea><br>
-        <!-- Don't forget to add a submit button -->
-        <input type="submit" value="Add Lesson">
-    </form>
-</div>
+    addLessonButton.addEventListener('click', function() {
+        addLessonModal.style.display = 'block';
+    });
+
+    closeAddLessonFormButton.addEventListener('click', function() {
+        addLessonModal.style.display = 'none';
+    });
+
+    closeLessonDetailsButton.addEventListener('click', function() {
+        lessonDetails.style.display = 'none';
+    });
+</script>
 
 <script>
     window.onload = function () {
@@ -93,7 +127,6 @@
 <script>
     function showLessonDetails(element) {
         let lessonId = element.getAttribute('data-id');
-        console.log('Lesson ID:', lessonId);
 
         fetch(`/schedule/lesson/${lessonId}`)
             .then(response => {
@@ -103,10 +136,9 @@
                 return response.json();
             })
             .then(lesson => {
-                console.log('Lesson:', lesson);
                 document.getElementById('lessonName').textContent = lesson.course.courseName;
                 document.getElementById('group').textContent = "Group: " + lesson.group.groupName;
-                document.getElementById('audience').textContent = "Classroom: " + lesson.classroomId.classroomId;
+                document.getElementById('classroom').textContent = "Classroom: " + lesson.classroomId.classroomId;
                 document.getElementById('startTime').textContent = "Lesson starts at: " + lesson.lessonStart;
                 document.getElementById('endTime').textContent = "Lesson ends at: " + lesson.lessonEnd;
                 document.getElementById('description').textContent = "Description: " + lesson.lessonDescription;
@@ -115,7 +147,30 @@
             .catch(error => {
                 console.error('Error:', error);
             });
+
+        let deleteButton = document.getElementById('deleteButton');
+        deleteButton.style.display = 'block';
+        deleteButton.onclick = function () {
+            deleteLesson(lessonId);
+        };
     }
+</script>
+
+<script>
+    function deleteLesson(lessonId) {
+        fetch(`/schedule/deleteLesson/${lessonId}`, {
+            method: 'DELETE',
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
 </script>
 
 <script>
@@ -174,9 +229,8 @@
         const lessonStart = new Date(`${lessonDate}T${StartTime}`);
 
         const lessonStartISO = `${lessonStart.getFullYear()}-${String(lessonStart.getMonth() + 1).padStart(2, '0')}-${String(lessonStart.getDate()).padStart(2, '0')}T${String(lessonStart.getHours()).padStart(2, '0')}:${String(lessonStart.getMinutes()).padStart(2, '0')}:${String(lessonStart.getSeconds()).padStart(2, '0')}`;
-        console.log(lessonStartISO);
 
-        fetch(`/getFreeClassrooms/${lessonStartISO}`)  // Use backticks here
+        fetch(`/getFreeClassrooms/${lessonStartISO}`)
             .then(response => response.json())
             .then(data => {
 
@@ -187,9 +241,7 @@
                 data.forEach(classRoom => {
                     let option = document.createElement('option');
                     option.value = classRoom.id;
-                    console.log(option.value);
                     option.textContent = classRoom.id;
-                    console.log(option.textContent);
                     classroomSelect.appendChild(option);
                 })
             })
@@ -204,7 +256,6 @@
         const course = document.getElementById('courseName').value;
         const group = document.getElementById('groupName').value;
         const classroom = document.getElementById('classroomId').value;
-        console.log(classroom)
         const lessonDate = document.getElementById('lessonDate').value;
         const StartTime = document.getElementById('lessonStart').value;
         const lessonDescription = document.getElementById('lessonDescription').value;

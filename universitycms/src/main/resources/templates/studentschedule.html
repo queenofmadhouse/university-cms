@@ -22,13 +22,26 @@
     </tr>
 </table>
 
-<div id="lessonDetails" style="display: none;">
-    <h3 id="lessonName"></h3>
-    <p id="teacherName"></p>
-    <p id="startTime"></p>
-    <p id="endTime"></p>
-    <p id="description"></p>
+<div id="lessonDetails" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeLessonDetails">&times;</span>
+        <h2 id="lessonName"></h2>
+        <p id="teacherName"></p>
+        <p id="startTime"></p>
+        <p id="endTime"></p>
+        <p id="description"></p>
+    </div>
 </div>
+
+
+<script>
+    let lessonDetails = document.getElementById('lessonDetails');
+    let closeLessonDetailsButton = document.getElementById('closeLessonDetails');
+
+    closeLessonDetailsButton.addEventListener('click', function() {
+        lessonDetails.style.display = 'none';
+    });
+</script>
 
 <script>
     function showLessonDetails(element) {
