@@ -39,8 +39,7 @@ CREATE TABLE university.courses
 
 CREATE TABLE university.classrooms
 (
-    classroom_id SERIAL PRIMARY KEY,
-    capacity     INTEGER NOT NULL
+    classroom_id SERIAL PRIMARY KEY
 );
 
 CREATE TABLE university.teachers_courses_relation
