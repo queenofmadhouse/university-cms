@@ -98,6 +98,7 @@ select {
 table {
     width: 100%;
     margin-top: 20px;
+    table-layout: fixed;
 }
 
 table, th, td {
@@ -105,7 +106,48 @@ table, th, td {
     border-collapse: collapse;
 }
 
+tr {
+    height: 120px;
+}
+
 th, td {
-    padding: 15px;
     text-align: left;
+    padding: 10px;
+}
+
+.table-cell {
+    position: relative;
+}
+
+.date {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: darkblue;
+}
+
+.lesson {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    padding-top: 5px;
+    box-sizing: border-box;
+}
+
+.course-name, .lesson-time {
+    width: 50%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-top: 20px;
+}
+
+.course-name {
+    text-align: left;
+}
+
+.lesson-time {
+    text-align: right;
 }

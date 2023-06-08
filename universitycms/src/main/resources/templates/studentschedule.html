@@ -11,12 +11,13 @@
 <h2>Your schedule for 30 days</h2>
 <table>
     <tr th:each="week : ${weeks}">
-        <td th:each="day : ${week}">
-
-            <span class="date" th:text="${day.getDate.getDayOfMonth()} + ' ' + ${day.getDate.getMonth().toString().toLowerCase()}"></span>
-            <div th:each="lesson : ${day.getLessons}" th:if="${lesson != null}">
-                <span th:text="${lesson.getCourse().getCourseName}" th:data-id="${lesson.getScheduleId()}" onclick="showLessonDetails(this)" style="cursor:pointer"></span>
-                <span th:text="${#temporals.format(lesson.lessonStart, 'HH:mm')} + ' - ' + ${#temporals.format(lesson.lessonEnd, 'HH:mm')}"></span>
+        <td th:each="day : ${week}" class="table-cell">
+            <span class="date"
+                  th:text="${day.getDate.getDayOfMonth()} + ' ' + ${day.getDate.getMonth().toString().toLowerCase()}"></span>
+            <div th:each="lesson : ${day.getLessons}" th:if="${lesson != null}" class="lesson">
+                <span class="course-name" onclick="showLessonDetails(this)" style="cursor:pointer"
+                      th:data-id="${lesson.getScheduleId()}" th:text="${lesson.getCourse().getCourseName}"></span>
+                <span class="lesson-time" th:text="${#temporals.format(lesson.lessonStart, 'HH:mm')} + ' - ' + ${#temporals.format(lesson.lessonEnd, 'HH:mm')}"></span>
             </div>
         </td>
     </tr>
