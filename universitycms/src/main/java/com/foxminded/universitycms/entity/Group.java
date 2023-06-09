@@ -17,9 +17,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Builder
 @AllArgsConstructor
@@ -47,7 +46,7 @@ public class Group {
             inverseJoinColumns = @JoinColumn(name = "course_id")
     )
     @ToString.Exclude
-    private List<Course> courses = new ArrayList<>();
+    private Set<Course> courses;
 
     @Override
     public boolean equals(Object o) {

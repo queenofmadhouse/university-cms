@@ -1,5 +1,6 @@
 package com.foxminded.universitycms.repository;
 
+
 import com.foxminded.universitycms.entity.Course;
 import com.foxminded.universitycms.entity.Group;
 import com.foxminded.universitycms.testconfiguration.IntegrationTest;

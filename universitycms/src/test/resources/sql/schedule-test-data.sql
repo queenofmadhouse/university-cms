@@ -1,9 +1,3 @@
-INSERT INTO university.users (user_id, first_name, last_name, email, password)
-VALUES (1, 'Alex', 'Kaplan', 'mail@mail.com', 'passwd');
-
-INSERT INTO university.teachers (user_id, department)
-VALUES (1, 'Math Department');
-
 INSERT INTO university.courses (course_id, course_name, course_description)
 VALUES (1, 'Math', 'Hard');
 
@@ -15,6 +9,18 @@ VALUES (1, 'A5');
 
 INSERT INTO university.groups (group_id, group_name)
 VALUES (2, 'B3');
+
+INSERT INTO university.users (user_id, first_name, last_name, email, password)
+VALUES (1, 'Alex', 'Kaplan', 'first@mail.com', 'passwd');
+
+INSERT INTO university.teachers (user_id, department)
+VALUES (1, 'Math Department');
+
+INSERT INTO university.users (user_id, first_name, last_name, email, password)
+VALUES (2, 'Boyana', 'Quell', 'second@mail.com', 'passwd');
+
+INSERT INTO university.students (user_id, group_id)
+VALUES (2, 1);
 
 INSERT INTO university.schedule (id, user_id, course_id, group_id, lesson_start, lesson_end, lesson_description)
 VALUES (1, 1, 2, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '1' HOUR, 'Description');

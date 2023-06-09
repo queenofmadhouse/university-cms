@@ -1,10 +1,15 @@
 package com.foxminded.universitycms.service;
 
+import com.foxminded.universitycms.entity.Course;
 import com.foxminded.universitycms.entity.Teacher;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface TeacherService {
 
-    Optional<Teacher> findByUserId(long id);
+    List<Course> findAllCoursesRelatedToTeacher(long teacherId);
+
+    Teacher findById(long id);
+
+    void saveAll(List<Teacher> teachers);
 }

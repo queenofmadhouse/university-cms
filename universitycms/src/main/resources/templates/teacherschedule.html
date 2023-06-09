@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/schedule.css}" type="text/css">
+</head>
+<body>
+
+<h1>Welcome Jane!</h1>
+
+<h2>Your schedule for 30 days</h2>
+
+<button id="addLessonButton">Add Lesson</button>
+
+<div id="lessonDetails" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeLessonDetails">&times;</span>
+        <h2 id="lessonName"></h2>
+        <p id="classroom"></p>
+        <p id="group"></p>
+        <p id="startTime"></p>
+        <p id="endTime"></p>
+        <p id="description"></p>
+        <button id="deleteButton" style="display: none;">Delete Lesson</button>
+    </div>
+</div>
+
+<div id="addLessonModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeAddLesson">&times;</span>
+        <div class="add-lesson-form">
+            <h2>Add a new lesson</h2>
+
+            <form id="add-lesson">
+                <label for="courseName">Course Name:</label><br>
+                <select id="courseName" name="courseName">
+                    <option value="">Please select...</option>
+                    <option th:each="course : ${courses}" th:text="${course.getCourseName()}"
+                            th:value="${course.getCourseId()}"></option>
+                </select><br>
+                <label for="groupName">Group name:</label><br>
+                <select id="groupName" name="groupName">
+                    <option value="">Please select...</option>
+                    <option th:each="group : ${groups}" th:text="${group.getGroupName()}"
+                            th:value="${group.getId()}"></option>
+                </select><br>
+                <label for="lessonDate">Lesson date:</label><br>
+                <select id="lessonDate" name="lessonDate">
+                    <option value="">Please select...</option>
+                    <option th:each="day : ${month}" th:text="${day}" th:value="${day}"></option>
+                </select><br>
+                <label for="lessonStart">Lesson starts at:</label><br>
+                <select id="lessonStart" name="lessonStart">
+                    <option value="">Please select...</option>
+                    <option th:each="time : ${timeSlots}" th:text="${time}" th:value="${time}"></option>
+                </select><br>
+                <label for="classroomId">Classroom:</label><br>
+                <select id="classroomId" name="classroom">
+                    <option value="">Please select...</option>
+                    <option th:each="classroom : ${freeClassrooms}" th:text="${classroom}"
+                            th:value="${classroom}"></option>
+                </select><br>
+                <label for="lessonDescription">Lesson Description:</label><br>
+                <textarea id="lessonDescription" name="lessonDescription"></textarea><br>
+
+                <button id="submit" style="display: block;">Add Lesson</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<table>
+    <tr th:each="week : ${weeks}">
+        <td th:each="day : ${week}" class="table-cell">
+            <span class="date"
+                  th:text="${day.getDate.getDayOfMonth()} + ' ' + ${day.getDate.getMonth().toString().toLowerCase()}"></span>
+            <div th:each="lesson : ${day.getLessons}" th:if="${lesson != null}" class="lesson">
+                <span class="course-name" onclick="showLessonDetails(this)" style="cursor:pointer"
+                      th:data-id="${lesson.getScheduleId()}" th:text="${lesson.getCourse().getCourseName}"></span>
+                <span class="lesson-time" th:text="${#temporals.format(lesson.lessonStart, 'HH:mm')} + ' - ' + ${#temporals.format(lesson.lessonEnd, 'HH:mm')}"></span>
+            </div>
+        </td>
+    </tr>
+</table>
+
+
+<script>
+    let addLessonButton = document.getElementById('addLessonButton');
+    let addLessonModal = document.getElementById('addLessonModal');
+    let closeAddLessonFormButton = document.getElementById('closeAddLesson');
+    let lessonDetails = document.getElementById('lessonDetails');
+    let closeLessonDetailsButton = document.getElementById('closeLessonDetails');
+
+
+    addLessonButton.addEventListener('click', function() {
+        addLessonModal.style.display = 'block';
+    });
+
+    closeAddLessonFormButton.addEventListener('click', function() {
+        addLessonModal.style.display = 'none';
+    });
+
+    closeLessonDetailsButton.addEventListener('click', function() {
+        lessonDetails.style.display = 'none';
+    });
+</script>
+
+<script>
+    window.onload = function () {
+        let startDate = new Date();
+        let endDate = new Date();
+        endDate.setDate(startDate.getDate() + 30);
+
+        let dateSelect = document.getElementById('lessonDate');
+        dateSelect.innerHTML = '';
+
+        for (let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
+            let option = document.createElement('option');
+            option.value = d.toISOString().slice(0, 10);
+            option.textContent = d.toISOString().slice(0, 10);
+            dateSelect.appendChild(option);
+        }
+    };
+</script>
+
+<script>
+    function showLessonDetails(element) {
+        let lessonId = element.getAttribute('data-id');
+
+        fetch(`/schedule/lesson/${lessonId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(lesson => {
+                document.getElementById('lessonName').textContent = lesson.course.courseName;
+                document.getElementById('group').textContent = "Group: " + lesson.group.groupName;
+                document.getElementById('classroom').textContent = "Classroom: " + lesson.classroomId.classroomId;
+                document.getElementById('startTime').textContent = "Lesson starts at: " + lesson.lessonStart;
+                document.getElementById('endTime').textContent = "Lesson ends at: " + lesson.lessonEnd;
+                document.getElementById('description').textContent = "Description: " + lesson.lessonDescription;
+                document.getElementById('lessonDetails').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+        let deleteButton = document.getElementById('deleteButton');
+        deleteButton.style.display = 'block';
+        deleteButton.onclick = function () {
+            deleteLesson(lessonId);
+        };
+    }
+</script>
+
+<script>
+    function deleteLesson(lessonId) {
+        fetch(`/schedule/deleteLesson/${lessonId}`, {
+            method: 'DELETE',
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+</script>
+
+<script>
+    document.getElementById('courseName').addEventListener('change', function () {
+        let selectedCourse = this.value;
+
+        fetch(`/getGroups?course=${selectedCourse}`)
+            .then(response => response.json())
+            .then(data => {
+                let groupSelect = document.getElementById('groupName');
+
+                groupSelect.innerHTML = '';
+
+                data.forEach(group => {
+                    let option = document.createElement('option');
+                    option.value = group.id;
+                    option.textContent = group.name;
+                    groupSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    });
+</script>
+
+<script>
+    document.getElementById('lessonDate').addEventListener('change', function () {
+        let selectedDate = this.value;
+        let teacherId = 2; // #TODO should be changed to REAL teacherId
+        let groupId = document.getElementById('groupName').value;
+
+        if (selectedDate !== "" && teacherId !== "" && groupId !== "") {
+            fetch(`/getTimeSlots/${selectedDate}/${teacherId}/${groupId}`)
+                .then(response => response.json())
+                .then(data => {
+                    let timeSlotSelect = document.getElementById('lessonStart');
+
+                    timeSlotSelect.innerHTML = '';
+
+                    data.forEach(timeSlot => {
+                        let option = document.createElement('option');
+                        option.value = timeSlot;
+                        option.textContent = timeSlot;
+                        timeSlotSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    })
+</script>
+
+<script>
+    document.getElementById('lessonStart').addEventListener('change', function () {
+        const lessonDate = document.getElementById('lessonDate').value;
+        const StartTime = document.getElementById('lessonStart').value;
+
+        const lessonStart = new Date(`${lessonDate}T${StartTime}`);
+
+        const lessonStartISO = `${lessonStart.getFullYear()}-${String(lessonStart.getMonth() + 1).padStart(2, '0')}-${String(lessonStart.getDate()).padStart(2, '0')}T${String(lessonStart.getHours()).padStart(2, '0')}:${String(lessonStart.getMinutes()).padStart(2, '0')}:${String(lessonStart.getSeconds()).padStart(2, '0')}`;
+
+        fetch(`/getFreeClassrooms/${lessonStartISO}`)
+            .then(response => response.json())
+            .then(data => {
+
+                let classroomSelect = document.getElementById('classroomId');
+
+                classroomSelect.innerHTML = '';
+
+                data.forEach(classRoom => {
+                    let option = document.createElement('option');
+                    option.value = classRoom.id;
+                    option.textContent = classRoom.id;
+                    classroomSelect.appendChild(option);
+                })
+            })
+            .catch(error => console.error('Error: ', error));
+    });
+</script>
+
+<script>
+    document.getElementById('add-lesson').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const course = document.getElementById('courseName').value;
+        const group = document.getElementById('groupName').value;
+        const classroom = document.getElementById('classroomId').value;
+        const lessonDate = document.getElementById('lessonDate').value;
+        const StartTime = document.getElementById('lessonStart').value;
+        const lessonDescription = document.getElementById('lessonDescription').value;
+
+        const lessonStart = new Date(`${lessonDate}T${StartTime}`);
+        const lessonEnd = new Date(lessonStart.getTime() + 50 * 60000);  // Add 50 minutes in milliseconds
+
+        const lessonStartISO = `${lessonStart.getFullYear()}-${String(lessonStart.getMonth() + 1).padStart(2, '0')}-${String(lessonStart.getDate()).padStart(2, '0')}T${String(lessonStart.getHours()).padStart(2, '0')}:${String(lessonStart.getMinutes()).padStart(2, '0')}:${String(lessonStart.getSeconds()).padStart(2, '0')}`;
+        const lessonEndISO = `${lessonEnd.getFullYear()}-${String(lessonEnd.getMonth() + 1).padStart(2, '0')}-${String(lessonEnd.getDate()).padStart(2, '0')}T${String(lessonEnd.getHours()).padStart(2, '0')}:${String(lessonEnd.getMinutes()).padStart(2, '0')}:${String(lessonEnd.getSeconds()).padStart(2, '0')}`;
+
+        const lessonData = {
+            course,
+            group,
+            classroom,
+            lessonStart: lessonStartISO,
+            lessonEnd: lessonEndISO,
+            lessonDescription,
+            teacher: 2  // #TODO should be changed to REAL teacher id
+        };
+
+        fetch('/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(lessonData),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
+</script>
+
+</body>
+</html>

@@ -1,5 +1,6 @@
 package com.foxminded.universitycms.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +26,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString(exclude = "teachers")
+@ToString
 @Entity
 @Table(name = "courses", schema = "university")
 public class Course {
@@ -41,13 +42,15 @@ public class Course {
     @Column(name = "course_description")
     private String courseDescription;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonManagedReference
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "teachers_courses_relation",
             schema = "university",
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
+    @ToString.Exclude
     private Set<Teacher> teachers;
 
     @Override

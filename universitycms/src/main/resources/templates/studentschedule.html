@@ -1,0 +1,74 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Schedule</title>
+    <link rel="stylesheet" th:href="@{/css/schedule.css}" type="text/css">
+</head>
+<body>
+
+<h1>Welcome Jane!</h1>
+
+<h2>Your schedule for 30 days</h2>
+<table>
+    <tr th:each="week : ${weeks}">
+        <td th:each="day : ${week}" class="table-cell">
+            <span class="date"
+                  th:text="${day.getDate.getDayOfMonth()} + ' ' + ${day.getDate.getMonth().toString().toLowerCase()}"></span>
+            <div th:each="lesson : ${day.getLessons}" th:if="${lesson != null}" class="lesson">
+                <span class="course-name" onclick="showLessonDetails(this)" style="cursor:pointer"
+                      th:data-id="${lesson.getScheduleId()}" th:text="${lesson.getCourse().getCourseName}"></span>
+                <span class="lesson-time" th:text="${#temporals.format(lesson.lessonStart, 'HH:mm')} + ' - ' + ${#temporals.format(lesson.lessonEnd, 'HH:mm')}"></span>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<div id="lessonDetails" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeLessonDetails">&times;</span>
+        <h2 id="lessonName"></h2>
+        <p id="teacherName"></p>
+        <p id="startTime"></p>
+        <p id="endTime"></p>
+        <p id="description"></p>
+    </div>
+</div>
+
+
+<script>
+    let lessonDetails = document.getElementById('lessonDetails');
+    let closeLessonDetailsButton = document.getElementById('closeLessonDetails');
+
+    closeLessonDetailsButton.addEventListener('click', function() {
+        lessonDetails.style.display = 'none';
+    });
+</script>
+
+<script>
+    function showLessonDetails(element) {
+        let lessonId = element.getAttribute('data-id');
+        console.log('Lesson ID:', lessonId);
+        fetch(`/schedule/lesson/${lessonId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(lesson => {
+                console.log('Lesson:', lesson);
+                document.getElementById('lessonName').textContent = lesson.course.courseName;
+                document.getElementById('teacherName').textContent = "Teacher: " + lesson.teacher.firstName + " " + lesson.teacher.lastName;
+                document.getElementById('startTime').textContent = "Lesson starts at: " + lesson.lessonStart;
+                document.getElementById('endTime').textContent = "Lesson ends at: " + lesson.lessonEnd;
+                document.getElementById('description').textContent = "Description: " + lesson.lessonDescription;
+                document.getElementById('lessonDetails').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+
+</body>
+</html>
