@@ -24,7 +24,7 @@ import java.util.Objects;
 @ToString
 @Table(name = "users", schema = "university")
 @Inheritance(strategy = InheritanceType.JOINED)
-abstract class User {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

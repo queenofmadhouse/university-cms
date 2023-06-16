@@ -18,6 +18,7 @@ import com.foxminded.universitycms.service.impl.CalendarService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -48,6 +49,7 @@ public class ScheduleController {
     private final ClassroomService classroomService;
     private final CalendarService calendarService;
 
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
     @GetMapping("/studentschedule")
     public String getStudentSchedule(Model model) {
 
@@ -61,6 +63,7 @@ public class ScheduleController {
         return "studentschedule";
     }
 
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
     @GetMapping("/teacherschedule")
     public String getTeacherSchedule(Model model) {
 
@@ -74,6 +77,7 @@ public class ScheduleController {
         return "teacherschedule";
     }
 
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
     @ResponseBody
     @GetMapping("/getGroups")
     public List<GroupDTO> getGroupsRelatedToCourse(@RequestParam("course") long selectedCourse) {
@@ -87,6 +91,7 @@ public class ScheduleController {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
     @ResponseBody
     @GetMapping("/getTimeSlots/{selectedDate}/{teacherId}/{groupId}")
     public List<LocalTime> getAvailableTimes(
@@ -98,6 +103,7 @@ public class ScheduleController {
         return scheduleService.findFreeTimeForTeacherAndGroup(selectedDate, teacher, group);
     }
 
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
     @ResponseBody
     @GetMapping("/getFreeClassrooms/{lessonStart}")
     public List<ClassroomDTO> getAvailableClassrooms(@PathVariable LocalDateTime lessonStart) {
@@ -113,12 +119,14 @@ public class ScheduleController {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
     @ResponseBody
     @GetMapping("/schedule/lesson/{scheduleId}")
     public Schedule getLesson(@PathVariable long scheduleId) {
         return scheduleService.findById(scheduleId);
     }
 
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
     @ResponseBody
     @DeleteMapping("/schedule/deleteLesson/{lessonId}")
     public void deleteLesson(@PathVariable long lessonId) {
@@ -126,6 +134,7 @@ public class ScheduleController {
         scheduleService.deleteById(lessonId);
     }
 
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
     @ResponseBody
     @PostMapping(path = "/add", consumes = "application/json", produces = "application/json")
     public ResponseEntity<ScheduleDTO> addLesson(@RequestBody ScheduleDTO scheduleDTO) {
