@@ -67,16 +67,16 @@ INSERT INTO university.groups (group_id, group_name) VALUES (5, 'U8');
 
 -- Users
 
-INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (1, 'Al', 'Rodriguez', 'woodrow.ernser@hotmail.com', 'awg5pxj9hd2n');
-INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (2, 'Shayne', 'Torp', 'daniella.cummings@hotmail.com', 'rmochm8ed4');
-INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (3, 'Jessica', 'Gleichner', 'michael.zulauf@yahoo.com', 'uhy2wsr40nvh1');
-INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (4, 'Cristal', 'Cummerata', 'chasity.hettinger@yahoo.com', 'g8tg2414qzlyy2');
-INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (5, 'Vicente', 'Dibbert', 'thalia.armstrong@hotmail.com', '3tmbvgkrqs8uc');
-INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (6, 'German', 'Franecki', 'mario.damore@hotmail.com', '4aou0vc8pf8oen9g');
-INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (7, 'Kiana', 'Boyer', 'cale.dibbert@hotmail.com', '2b6d0j7jln');
-INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (8, 'Jennifer', 'Barton', 'christopher.robel@gmail.com', 'w7o04d7k8md8');
-INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (9, 'Royce', 'Bradtke', 'keegan.schuster@gmail.com', 'nmoinlvcn4');
-INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (10, 'Elena', 'Dietrich', 'oren.bruen@gmail.com', 'l3iffyli5fqxo9ia');
+INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (1, 'Al', 'Rodriguez', 'woodrow.ernser@hotmail.com', '$2a$10$xPKt8S.v1BuGfcXEoRLKCei8NgOJAP3A.aj0pxTUnJ1au75ef36fy');
+INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (2, 'Shayne', 'Torp', 'daniella.cummings@hotmail.com', '$2a$10$v.JftN8GMjfkPD/4HbbUmOrpF8TZvp7dq1f81PjUL/3EdJTF.WFK.');
+INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (3, 'Jessica', 'Gleichner', 'michael.zulauf@yahoo.com', '$2a$10$FCzzTvgZLJYfgSneWsRWguhsIv8bUdvLZI2ZaT07/PXLiSqHfPhJK');
+INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (4, 'Cristal', 'Cummerata', 'chasity.hettinger@yahoo.com', '$2a$10$wbVZzKO/a/I5TDQua804fugfBHllmcSS7N9qn8PbT6rlLKTZPRPHq');
+INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (5, 'Vicente', 'Dibbert', 'thalia.armstrong@hotmail.com', '$2a$10$8K6G4hG6AqXbMn5r2Qce2eGUtFyT/4F1/zctfSYf2bAyu1/P3yoau');
+INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (6, 'German', 'Franecki', 'mario.damore@hotmail.com', '$2a$10$TIWZ4JNeAo.7lMFL4gZifO4C4fK1ZG2gkmZfzA3EO25VCsgJTrZQK');
+INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (7, 'Kiana', 'Boyer', 'cale.dibbert@hotmail.com', '$2a$10$m6EklalK1ihwNhXm6tDZ5ebfVTisx7Buv.qW5bleuiNvom/27FXIG');
+INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (8, 'Jennifer', 'Barton', 'christopher.robel@gmail.com', '$2a$10$lFN4RnqTVH7pwx/LsFNxTusvYFc9bm7TBbNv.0zsFd.7yRXNqT2Hi');
+INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (9, 'Royce', 'Bradtke', 'keegan.schuster@gmail.com', '$2a$10$SWAfbb.ioTVQ1/eEZD4Et.zCz.XzDK3l.5t21gyu/EYXWdHnjQ5fy');
+INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (10, 'Elena', 'Dietrich', 'oren.bruen@gmail.com', '$2a$10$pjfrJovXusl0XtuLYQdzV.O3h1VodsX9nhEShNGy5aI2T9paYcllm');
 
 
 
