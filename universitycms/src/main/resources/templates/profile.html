@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/profile.css}" type="text/css">
+</head>
+<body>
+
+<h1>Your profile</h1>
+
+<div class="profileInfo">
+    <div th:text="'Name: ' + ${profile.getFirstName}"></div>
+    <div th:text="'Surname: ' + ${profile.getLastName()}"></div>
+    <div th:text="'Email: ' + ${profile.getEmail()}"></div>
+    <div sec:authorize="hasRole('ROLE_TEACHER')">
+        <div th:text="'Department: ' + ${profile.getDepartment()}"></div>
+    </div>
+    <div sec:authorize="hasRole('ROLE_STUDENT')">
+        <div th:text="'Group: ' + ${profile.getGroup()}"></div>
+    </div>
+</div>
+
+</body>
+</html>

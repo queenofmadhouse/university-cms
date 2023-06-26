@@ -1,5 +1,3 @@
--- This script generate demo data for application on first start
-
 -- Classrooms
 
 INSERT INTO university.classrooms (classroom_id) VALUES (1);
@@ -91,11 +89,11 @@ INSERT INTO university.students (user_id, group_id) VALUES (10, 5);
 
 -- Teachers
 
-INSERT INTO university.teachers (user_id, department) VALUES (1, NULL);
-INSERT INTO university.teachers (user_id, department) VALUES (2, NULL);
-INSERT INTO university.teachers (user_id, department) VALUES (3, NULL);
-INSERT INTO university.teachers (user_id, department) VALUES (4, NULL);
-INSERT INTO university.teachers (user_id, department) VALUES (5, NULL);
+INSERT INTO university.teachers (user_id, department) VALUES (1, 'FpHD');
+INSERT INTO university.teachers (user_id, department) VALUES (2, 'FpHD');
+INSERT INTO university.teachers (user_id, department) VALUES (3, 'FpHD');
+INSERT INTO university.teachers (user_id, department) VALUES (4, 'FpHD');
+INSERT INTO university.teachers (user_id, department) VALUES (5, 'FpHD');
 
 
 -- Teacher courses relation

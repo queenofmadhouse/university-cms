@@ -10,3 +10,41 @@ h1 {
     padding: 20px;
     font-size: 2em;
 }
+
+.main-menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.main-menu a {
+    display: inline-block;
+    width: 100px;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007BFF;
+    border-radius: 3px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.main-menu a:hover {
+    background-color: #0056b3;
+}
+
+.main-menu a:active {
+    background-color: #004a99;
+}
+
+.main-menu a:focus {
+    outline: none;
+}

@@ -24,8 +24,8 @@ h1 {
     display: inline-block;
     width: 100px;
     height: 36px;
-    line-height: 36px; /* Center the text vertically */
-    text-align: center; /* Center the text horizontally */
+    line-height: 36px;
+    text-align: center;
     text-decoration: none;
     color: #fff;
     background-color: #007BFF;
