@@ -47,9 +47,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public Map<LocalDate, List<Schedule>> findScheduleByTeacher(Long teacherId, int days) {
+    public Map<LocalDate, List<Schedule>> findScheduleByTeacher(String teacherEmail, int days) {
 
-        Teacher teacher = teacherService.findById(teacherId);
+        Teacher teacher = teacherService.findByEmail(teacherEmail);
         LocalDate today = LocalDate.now();
         LocalDateTime startDate = today.atStartOfDay();
         LocalDateTime endDate = today.plusDays(days).atTime(23, 59, 59);
@@ -61,9 +61,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public Map<LocalDate, List<Schedule>> findScheduleByStudent(Long studentId, int days) {
+    public Map<LocalDate, List<Schedule>> findScheduleByStudent(String studentId, int days) {
 
-        Group group = studentService.findById(studentId).getGroup();
+        Group group = studentService.findByEmail(studentId).getGroup();
         LocalDate today = LocalDate.now();
         LocalDateTime startDate = today.atStartOfDay();
         LocalDateTime endDate = today.plusDays(days).atTime(23, 59, 59);

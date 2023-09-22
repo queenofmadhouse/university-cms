@@ -11,7 +11,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -25,18 +24,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) {
 
         log.info("Trying to login by using email: " + email);
 
         User user = userRepository.findByEmail(email);
 
         log.info("Found user: " + user.toString());
-
-        if (user == null) {
-            log.error("User = null");
-            throw new UsernameNotFoundException("User not found");
-        }
 
         Set<GrantedAuthority> roles = new HashSet<>();
 

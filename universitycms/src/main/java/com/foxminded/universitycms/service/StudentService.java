@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface StudentService {
 
-    Student findById(long id);
+    Student findByEmail(String email);
 
     void saveAll(List<Student> students);
 }

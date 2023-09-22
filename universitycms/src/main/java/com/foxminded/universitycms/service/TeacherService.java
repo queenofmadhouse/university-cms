@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface TeacherService {
 
-    List<Course> findAllCoursesRelatedToTeacher(long teacherId);
+    List<Course> findAllCoursesRelatedToTeacher(String email);
 
-    Teacher findById(long id);
+    Teacher findByEmail(String email);
 
     void saveAll(List<Teacher> teachers);
 }

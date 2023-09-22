@@ -16,9 +16,10 @@ import com.foxminded.universitycms.service.ScheduleService;
 import com.foxminded.universitycms.service.TeacherService;
 import com.foxminded.universitycms.service.impl.CalendarService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,7 +40,6 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Controller
-@Slf4j
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
@@ -53,9 +53,10 @@ public class ScheduleController {
     @GetMapping("/studentschedule")
     public String getStudentSchedule(Model model) {
 
-        Long studentId = 6L;  // #TODO: should be real studentId
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String studentEmail = authentication.getName();
 
-        Map<LocalDate, List<Schedule>> schedules = scheduleService.findScheduleByStudent(studentId, 30);
+        Map<LocalDate, List<Schedule>> schedules = scheduleService.findScheduleByStudent(studentEmail, 30);
         List<List<Day>> weeks = calendarService.prepareCalendar(schedules);
         List<LocalDate> month = calendarService.prepareDates(30);
         model.addAttribute("month", month);
@@ -67,10 +68,12 @@ public class ScheduleController {
     @GetMapping("/teacherschedule")
     public String getTeacherSchedule(Model model) {
 
-        Long teacherId = 2L;  // #TODO: should be real teacherId
-        List<Course> courses = new ArrayList<>(teacherService.findAllCoursesRelatedToTeacher(teacherId));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String teacherEmail = authentication.getName();
 
-        Map<LocalDate, List<Schedule>> schedules = scheduleService.findScheduleByTeacher(teacherId, 30);
+        List<Course> courses = new ArrayList<>(teacherService.findAllCoursesRelatedToTeacher(teacherEmail));
+
+        Map<LocalDate, List<Schedule>> schedules = scheduleService.findScheduleByTeacher(teacherEmail, 30);
         List<List<Day>> weeks = calendarService.prepareCalendar(schedules);
         model.addAttribute("courses", courses);
         model.addAttribute("weeks", weeks);
@@ -97,7 +100,10 @@ public class ScheduleController {
     public List<LocalTime> getAvailableTimes(
             @PathVariable LocalDate selectedDate, @PathVariable Long teacherId, @PathVariable long groupId) {
 
-        Teacher teacher = teacherService.findById(teacherId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String teacherEmail = authentication.getName();
+
+        Teacher teacher = teacherService.findByEmail(teacherEmail);
         Group group = groupService.findById(groupId);
 
         return scheduleService.findFreeTimeForTeacherAndGroup(selectedDate, teacher, group);
@@ -108,11 +114,7 @@ public class ScheduleController {
     @GetMapping("/getFreeClassrooms/{lessonStart}")
     public List<ClassroomDTO> getAvailableClassrooms(@PathVariable LocalDateTime lessonStart) {
 
-        log.info("try to find free classrooms");
-
         List<Classroom> foundFreeClassrooms = classroomService.findFreeClassrooms(lessonStart);
-
-        log.info("foundFreeClassrooms: " + foundFreeClassrooms);
 
         return foundFreeClassrooms.stream()
                 .map(classroom -> new ClassroomDTO(classroom.getClassroomId()))
@@ -121,14 +123,14 @@ public class ScheduleController {
 
     @PreAuthorize("hasRole('ROLE_TEACHER')")
     @ResponseBody
-    @GetMapping("/schedule/lesson/{scheduleId}")
+    @GetMapping("/lesson/{scheduleId}")
     public Schedule getLesson(@PathVariable long scheduleId) {
         return scheduleService.findById(scheduleId);
     }
 
     @PreAuthorize("hasRole('ROLE_TEACHER')")
     @ResponseBody
-    @DeleteMapping("/schedule/deleteLesson/{lessonId}")
+    @DeleteMapping("/deleteLesson/{lessonId}")
     public void deleteLesson(@PathVariable long lessonId) {
 
         scheduleService.deleteById(lessonId);
@@ -139,11 +141,8 @@ public class ScheduleController {
     @PostMapping(path = "/add", consumes = "application/json", produces = "application/json")
     public ResponseEntity<ScheduleDTO> addLesson(@RequestBody ScheduleDTO scheduleDTO) {
 
-        log.info("trying to save: " + scheduleDTO);
-
         scheduleService.save(scheduleDTO);
 
-        log.info(scheduleDTO.toString());
         return ResponseEntity.ok(scheduleDTO);
     }
 }

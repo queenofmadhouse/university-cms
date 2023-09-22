@@ -17,17 +17,17 @@ public class TeacherServiceImpl implements TeacherService {
     private final TeacherRepository teacherRepository;
 
     @Override
-    public List<Course> findAllCoursesRelatedToTeacher(long teacherId) {
+    public List<Course> findAllCoursesRelatedToTeacher(String teacherEmail) {
 
-        Teacher teacher = findById(teacherId);
+        Teacher teacher = findByEmail(teacherEmail);
 
         return teacherRepository.findAllCoursesRelatedToTeacher(teacher);
     }
 
     @Override
-    public Teacher findById(long id) {
-        return teacherRepository.findById(id).orElseThrow(() ->
-                new DatabaseRuntimeException("Can't find teacher by id: " + id));
+    public Teacher findByEmail(String email) {
+        return teacherRepository.findByEmail(email).orElseThrow(() ->
+                new DatabaseRuntimeException("Can't find teacher by email: " + email));
     }
 
     @Override

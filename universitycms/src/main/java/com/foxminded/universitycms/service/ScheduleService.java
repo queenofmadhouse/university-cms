@@ -12,9 +12,9 @@ import java.util.Map;
 
 public interface ScheduleService {
 
-    Map<LocalDate, List<Schedule>> findScheduleByTeacher(Long teacherId, int days);
+    Map<LocalDate, List<Schedule>> findScheduleByTeacher(String teacherEmail, int days);
 
-    Map<LocalDate, List<Schedule>> findScheduleByStudent(Long studentId, int days);
+    Map<LocalDate, List<Schedule>> findScheduleByStudent(String studentEmail, int days);
 
     Schedule findById(long id);
 

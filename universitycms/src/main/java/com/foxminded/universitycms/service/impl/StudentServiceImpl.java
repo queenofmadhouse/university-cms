@@ -16,9 +16,9 @@ public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
 
     @Override
-    public Student findById(long id) {
-        return studentRepository.findById(id).orElseThrow(() ->
-                new DatabaseRuntimeException("Can't find student by id: " + id));
+    public Student findByEmail(String email) {
+        return studentRepository.findByEmail(email).orElseThrow(() ->
+                new DatabaseRuntimeException("Can't find student by id: " + email));
     }
 
     @Override
