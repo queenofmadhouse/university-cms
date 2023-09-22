@@ -197,11 +197,10 @@
 <script>
     document.getElementById('lessonDate').addEventListener('change', function () {
         let selectedDate = this.value;
-        let teacherId = 2; // #TODO should be changed to REAL teacherId
         let groupId = document.getElementById('groupName').value;
 
-        if (selectedDate !== "" && teacherId !== "" && groupId !== "") {
-            fetch(`/getTimeSlots/${selectedDate}/${teacherId}/${groupId}`)
+        if (selectedDate !== "" && groupId !== "") {
+            fetch(`/getTimeSlots/${selectedDate}/${groupId}`)
                 .then(response => response.json())
                 .then(data => {
                     let timeSlotSelect = document.getElementById('lessonStart');

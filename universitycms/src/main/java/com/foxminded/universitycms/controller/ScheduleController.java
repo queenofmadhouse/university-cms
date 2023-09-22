@@ -16,6 +16,7 @@ import com.foxminded.universitycms.service.ScheduleService;
 import com.foxminded.universitycms.service.TeacherService;
 import com.foxminded.universitycms.service.impl.CalendarService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -48,6 +49,8 @@ public class ScheduleController {
     private final CourseService courseService;
     private final ClassroomService classroomService;
     private final CalendarService calendarService;
+    @Value("${app.constants.calendar.amount-of-days}")
+    private int amountOfDaysInMonth;
 
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     @GetMapping("/studentschedule")
@@ -56,7 +59,8 @@ public class ScheduleController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String studentEmail = authentication.getName();
 
-        Map<LocalDate, List<Schedule>> schedules = scheduleService.findScheduleByStudent(studentEmail, 30);
+        Map<LocalDate, List<Schedule>> schedules = scheduleService.findScheduleByStudent(studentEmail,
+                amountOfDaysInMonth);
         List<List<Day>> weeks = calendarService.prepareCalendar(schedules);
         List<LocalDate> month = calendarService.prepareDates(30);
         model.addAttribute("month", month);
@@ -73,7 +77,8 @@ public class ScheduleController {
 
         List<Course> courses = new ArrayList<>(teacherService.findAllCoursesRelatedToTeacher(teacherEmail));
 
-        Map<LocalDate, List<Schedule>> schedules = scheduleService.findScheduleByTeacher(teacherEmail, 30);
+        Map<LocalDate, List<Schedule>> schedules = scheduleService.findScheduleByTeacher(teacherEmail,
+                amountOfDaysInMonth);
         List<List<Day>> weeks = calendarService.prepareCalendar(schedules);
         model.addAttribute("courses", courses);
         model.addAttribute("weeks", weeks);
@@ -96,9 +101,9 @@ public class ScheduleController {
 
     @PreAuthorize("hasRole('ROLE_TEACHER')")
     @ResponseBody
-    @GetMapping("/getTimeSlots/{selectedDate}/{teacherId}/{groupId}")
+    @GetMapping("/getTimeSlots/{selectedDate}/{groupId}")
     public List<LocalTime> getAvailableTimes(
-            @PathVariable LocalDate selectedDate, @PathVariable Long teacherId, @PathVariable long groupId) {
+            @PathVariable LocalDate selectedDate, @PathVariable long groupId) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String teacherEmail = authentication.getName();
