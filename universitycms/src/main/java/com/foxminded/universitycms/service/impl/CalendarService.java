@@ -21,6 +21,8 @@ public class CalendarService {
     @Value("${app.constants.calendar.week-size}")
     private int weekSize;
 
+    private static final int ONE_DAY = 1;
+
     public List<List<Day>> prepareCalendar(Map<LocalDate, List<Schedule>> scheduleMap) {
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = startDate.plusDays(amountOfDays);
@@ -28,7 +30,7 @@ public class CalendarService {
         List<List<Day>> weeks = new ArrayList<>();
         List<Day> week = new ArrayList<>();
 
-        for (LocalDate date = startDate; !date.isEqual(endDate); date = date.plusDays(1)) {
+        for (LocalDate date = startDate; !date.isEqual(endDate); date = date.plusDays(ONE_DAY)) {
             List<Schedule> lessons = scheduleMap.getOrDefault(date, new ArrayList<>());
             week.add(new Day(date, lessons));
 

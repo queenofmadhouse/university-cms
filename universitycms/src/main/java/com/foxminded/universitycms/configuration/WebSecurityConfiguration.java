@@ -51,4 +51,3 @@ public class WebSecurityConfiguration {
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder);
     }
 }
-
