@@ -3,13 +3,15 @@ package com.foxminded.universitycms.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.Formatter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 @Configuration
-public class DateTimeConfiguration {
+public class AppConfiguration {
 
     @Bean
     public Formatter<LocalDateTime> localDateTimeFormatter() {
@@ -25,5 +27,10 @@ public class DateTimeConfiguration {
                 return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(object);
             }
         };
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
