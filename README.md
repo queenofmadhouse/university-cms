@@ -18,3 +18,14 @@ Teachers have the additional capability of adding lessons to the schedule, givin
 - Flyway Migration
 - Spring Data
 
+## Demo access
+
+For demo login, use the following accounts:
+
+#### For students:
+- Login: christopher.robel@gmail.com
+- Password: w7o04d7k8md8
+
+#### For teachers:
+- Login: michael.zulauf@yahoo.com
+- Password: uhy2wsr40nvh1
