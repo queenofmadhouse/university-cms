@@ -16,7 +16,9 @@ import com.foxminded.universitycms.service.ScheduleService;
 import com.foxminded.universitycms.service.TeacherService;
 import com.foxminded.universitycms.service.impl.CalendarService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -40,6 +42,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Slf4j
 @Controller
 public class ScheduleController {
 
@@ -59,6 +62,8 @@ public class ScheduleController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String studentEmail = authentication.getName();
 
+        log.info("Trying to get schedule for student with email: " + studentEmail);
+
         Map<LocalDate, List<Schedule>> schedules = scheduleService.findScheduleByStudent(studentEmail,
                 amountOfDaysInMonth);
         List<List<Day>> weeks = calendarService.prepareCalendar(schedules);
@@ -75,6 +80,8 @@ public class ScheduleController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String teacherEmail = authentication.getName();
 
+        log.info("Trying to get schedule for teacher with email: {}", teacherEmail);
+
         List<Course> courses = new ArrayList<>(teacherService.findAllCoursesRelatedToTeacher(teacherEmail));
 
         Map<LocalDate, List<Schedule>> schedules = scheduleService.findScheduleByTeacher(teacherEmail,
@@ -90,9 +97,13 @@ public class ScheduleController {
     @GetMapping("/getGroups")
     public List<GroupDTO> getGroupsRelatedToCourse(@RequestParam("course") long selectedCourse) {
 
+        log.info("Trying to find groups related to course with id: {} ", selectedCourse);
+
         Course course = courseService.findById(selectedCourse);
 
         List<Group> groupsRelatedToCourse = groupService.findAllByCourse(course);
+
+        log.info("Found groups related to course: " + groupsRelatedToCourse);
 
         return groupsRelatedToCourse.stream()
                 .map(group -> new GroupDTO(group.getGroupId(), group.getGroupName()))
@@ -104,6 +115,8 @@ public class ScheduleController {
     @GetMapping("/getTimeSlots/{selectedDate}/{groupId}")
     public List<LocalTime> getAvailableTimes(
             @PathVariable LocalDate selectedDate, @PathVariable long groupId) {
+
+        log.info("Trying to find free time slots for group with id: {}", groupId);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String teacherEmail = authentication.getName();
@@ -119,7 +132,11 @@ public class ScheduleController {
     @GetMapping("/getFreeClassrooms/{lessonStart}")
     public List<ClassroomDTO> getAvailableClassrooms(@PathVariable LocalDateTime lessonStart) {
 
+        log.info("Trying to find free classrooms for lesson, that will starts at: {}", lessonStart);
+
         List<Classroom> foundFreeClassrooms = classroomService.findFreeClassrooms(lessonStart);
+
+        log.info("Found free classrooms: {}", foundFreeClassrooms.toString());
 
         return foundFreeClassrooms.stream()
                 .map(classroom -> new ClassroomDTO(classroom.getClassroomId()))
@@ -130,6 +147,9 @@ public class ScheduleController {
     @ResponseBody
     @GetMapping("/lesson/{scheduleId}")
     public Schedule getLesson(@PathVariable long scheduleId) {
+
+        log.info("Trying to find lesson by id: {}", scheduleId);
+
         return scheduleService.findById(scheduleId);
     }
 
@@ -137,6 +157,8 @@ public class ScheduleController {
     @ResponseBody
     @DeleteMapping("/deleteLesson/{lessonId}")
     public void deleteLesson(@PathVariable long lessonId) {
+
+        log.info("Trying to delete lesson with id: {}", lessonId);
 
         scheduleService.deleteById(lessonId);
     }
@@ -146,7 +168,20 @@ public class ScheduleController {
     @PostMapping(path = "/add", consumes = "application/json", produces = "application/json")
     public ResponseEntity<ScheduleDTO> addLesson(@RequestBody ScheduleDTO scheduleDTO) {
 
+        log.info("Received schedule data: {}", scheduleDTO);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String teacherEmail = authentication.getName();
+
+        Teacher teacher = teacherService.findByEmail(teacherEmail);
+
+        scheduleDTO.setTeacher(teacher.getUserId());
+
+        log.info("Trying to save lesson: {}", scheduleDTO.toString());
+
         scheduleService.save(scheduleDTO);
+
+        log.info("Lesson successfully saved, returning response: {}", scheduleDTO);
 
         return ResponseEntity.ok(scheduleDTO);
     }
