@@ -29,6 +29,7 @@ public class WebSecurityConfiguration {
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers("/studentschedule").hasRole("STUDENT")
+                .antMatchers("/schedule/lesson/**").hasRole("STUDENT")
                 .antMatchers("/teacherschedule").hasRole("TEACHER")
                 .antMatchers("/getGroups", "/getTimeSlots/**", "/getFreeClassrooms/**", "/schedule/lesson/**", "/schedule/deleteLesson/**", "/add").hasRole("TEACHER")
                 .anyRequest().authenticated()

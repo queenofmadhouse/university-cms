@@ -46,7 +46,7 @@
     function showLessonDetails(element) {
         let lessonId = element.getAttribute('data-id');
         console.log('Lesson ID:', lessonId);
-        fetch(`/schedule/lesson/${lessonId}`)
+        fetch(`/lesson/${lessonId}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
