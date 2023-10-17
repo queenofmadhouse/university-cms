@@ -1,0 +1,28 @@
+server:
+  port: 8080
+spring:
+  flyway:
+    locations: classpath:/db/migration/postgres
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${POSTGRES_DB_URL}
+    username: ${POSTGRES_DB_USERNAME}
+    password: ${POSTGRES_DB_PASSWORD}
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 5
+#  jackson:
+#    serialization:
+#      write_dates_as_timestamps: false
+#    date-format: yyyy-MM-dd'T'HH:mm:ss
+#app:
+#  constants:
+#    schedule:
+#      work-day-start-hour: 8
+#      work-day-end-hour: 18
+#      lesson:
+#        lesson-duration: 50
+#        break-between-lessons: 10
+#    calendar:
+#      amount-of-days: 30
+#      week-size: 6

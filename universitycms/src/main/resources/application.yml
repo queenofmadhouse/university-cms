@@ -1,16 +1,6 @@
-server:
-  port: 8080
 spring:
-  flyway:
-    locations: classpath:/db/migration/postgres
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: ${POSTGRES_DB_URL}
-    username: ${POSTGRES_DB_USERNAME}
-    password: ${POSTGRES_DB_PASSWORD}
-    hikari:
-      minimum-idle: 1
-      maximum-pool-size: 5
+  profiles:
+    active: dev
   jackson:
     serialization:
       write_dates_as_timestamps: false
