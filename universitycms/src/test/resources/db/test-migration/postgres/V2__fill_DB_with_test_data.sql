@@ -1,3 +1,9 @@
+INSERT INTO university.classrooms (classroom_id)
+VALUES (1);
+
+INSERT INTO university.classrooms (classroom_id)
+VALUES (2);
+
 INSERT INTO university.courses (course_id, course_name, course_description)
 VALUES (1, 'Math', 'Hard');
 
@@ -22,11 +28,11 @@ VALUES (2, 'Boyana', 'Quell', 'second@mail.com', 'passwd');
 INSERT INTO university.students (user_id, group_id)
 VALUES (2, 1);
 
-INSERT INTO university.schedule (id, user_id, course_id, group_id, lesson_start, lesson_end, lesson_description)
-VALUES (1, 1, 2, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '1' HOUR, 'Description');
+INSERT INTO university.schedule (id, user_id, course_id, group_id, lesson_start, lesson_end, lesson_description, classroom_id)
+VALUES (1, 1, 2, 1, CURRENT_TIMESTAMP, DATEADD('HOUR', 1, CURRENT_TIMESTAMP), 'Description', 1);
 
-INSERT INTO university.schedule (id, user_id, course_id, group_id, lesson_start, lesson_end, lesson_description)
-VALUES (2, 1, 2, 1, CURRENT_TIMESTAMP + INTERVAL '5' DAY, CURRENT_TIMESTAMP + INTERVAL '5' DAY + INTERVAL '1' HOUR, 'Description');
+INSERT INTO university.schedule (id, user_id, course_id, group_id, lesson_start, lesson_end, lesson_description, classroom_id)
+VALUES (2, 1, 2, 1, DATEADD('DAY', 5, CURRENT_TIMESTAMP), DATEADD('HOUR', 1, DATEADD('DAY', 5, CURRENT_TIMESTAMP)), 'Description', 2);
 
 INSERT INTO university.teachers_courses_relation (user_id, course_id)
 VALUES (1, 1);
