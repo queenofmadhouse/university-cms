@@ -1,6 +1,5 @@
 package com.foxminded.universitycms.service.impl;
 
-import com.foxminded.universitycms.entity.Classroom;
 import com.foxminded.universitycms.entity.Course;
 import com.foxminded.universitycms.entity.Group;
 import com.foxminded.universitycms.entity.Schedule;
@@ -9,6 +8,7 @@ import com.foxminded.universitycms.entity.Teacher;
 import com.foxminded.universitycms.entity.dto.ScheduleDTO;
 import com.foxminded.universitycms.exception.DatabaseRuntimeException;
 import com.foxminded.universitycms.testconfiguration.IntegrationTest;
+import com.foxminded.universitycms.testojectsfactory.TestObjectFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
@@ -34,14 +34,7 @@ class ScheduleServiceImplTestIT {
     @Test
     void getScheduleByTeacherShouldThrowDataBaseRuntimeExceptionWhenScheduleForTeacherNotExists() {
 
-        Teacher notExistTeacher = Teacher.builder()
-                .userId(999L)
-                .firstName("Not Exist")
-                .lastName("Not Exist")
-                .email("not@exist.com")
-                .password("null")
-                .department("Not Exist")
-                .build();
+        Teacher notExistTeacher = TestObjectFactory.createNotExistTeacher();
 
         assertThrows(DatabaseRuntimeException.class, () ->
                 scheduleService.findScheduleByTeacher(notExistTeacher.getEmail(), 30));
@@ -57,33 +50,10 @@ class ScheduleServiceImplTestIT {
     @Test
     void getScheduleByGroupShouldReturnMapWithScheduleForGroup() {
 
-        Teacher teacherAlex = Teacher.builder()
-                .userId(1L)
-                .firstName("Alex")
-                .lastName("Kaplan")
-                .email("first@mail.com")
-                .password("passwd")
-                .department("Math Department")
-                .build();
-
-        Course courseBiology = Course.builder()
-                .courseId(2L)
-                .courseName("Biology")
-                .courseDescription("Hard")
-                .build();
-
-        Group groupA5 = Group.builder()
-                .groupId(1L)
-                .groupName("A5").build();
-
-        Student studentBoyana = Student.builder()
-                .userId(2L)
-                .firstName("Alex")
-                .lastName("Kaplan")
-                .email("second@mail.com")
-                .password("passwd")
-                .group(groupA5)
-                .build();
+        Teacher teacherAlex = TestObjectFactory.createTeacherAlex();
+        Course courseBiology = TestObjectFactory.createCourseBiology();
+        Group groupA5 = TestObjectFactory.createGroupA5();
+        Student studentBoyana = TestObjectFactory.createStudentBoyana();
 
         Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService
                 .findScheduleByStudent(studentBoyana.getEmail(), 30);
@@ -105,24 +75,9 @@ class ScheduleServiceImplTestIT {
     @Test
     void getScheduleByTeacherShouldReturnMapWithScheduleForTeacher() {
 
-        Teacher teacherAlex = Teacher.builder()
-                .userId(1L)
-                .firstName("Alex")
-                .lastName("Kaplan")
-                .email("first@mail.com")
-                .password("passwd")
-                .department("Math Department")
-                .build();
-
-        Course courseBiology = Course.builder()
-                .courseId(2L)
-                .courseName("Biology")
-                .courseDescription("Hard")
-                .build();
-
-        Group groupA5 = Group.builder()
-                .groupId(1L)
-                .groupName("A5").build();
+        Teacher teacherAlex = TestObjectFactory.createTeacherAlex();
+        Course courseBiology = TestObjectFactory.createCourseBiology();
+        Group groupA5 = TestObjectFactory.createGroupA5();
 
         Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService.findScheduleByTeacher(teacherAlex.getEmail(), 30);
 
@@ -142,6 +97,7 @@ class ScheduleServiceImplTestIT {
 
     @Test
     void findByIdShouldThrowDatabaseRuntimeExceptionWhenIdNotExists() {
+
         long nonExistentId = 999L;
 
         assertThrows(DatabaseRuntimeException.class, () -> scheduleService.findById(nonExistentId));
@@ -149,6 +105,7 @@ class ScheduleServiceImplTestIT {
 
     @Test
     void deleteByIdShouldDeleteScheduleWhenIdExists() {
+
         long id = 1;
 
         scheduleService.deleteById(id);
@@ -159,42 +116,10 @@ class ScheduleServiceImplTestIT {
     @Test
     void findByIdShouldReturnScheduleById() {
 
-        Teacher teacherAlex = Teacher.builder()
-                .userId(1L)
-                .firstName("Alex")
-                .lastName("Kaplan")
-                .email("first@mail.com")
-                .password("passwd")
-                .department("Math Department")
-                .build();
-
-        Course courseBiology = Course.builder()
-                .courseId(2L)
-                .courseName("Biology")
-                .courseDescription("Hard")
-                .build();
-
-        Group groupA5 = Group.builder()
-                .groupId(1L)
-                .groupName("A5").build();
-
-        Classroom classroomFirst = Classroom.builder()
-                .classroomId(1L)
-                .build();
-
         LocalDateTime lessonStart = LocalDate.now().atStartOfDay().plusHours(8);
         LocalDateTime lessonEnd = LocalDate.now().atStartOfDay().plusHours(8).plusMinutes(50);
 
-        Schedule expextedSchedule = Schedule.builder()
-                .scheduleId(1L)
-                .teacher(teacherAlex)
-                .group(groupA5)
-                .course(courseBiology)
-                .classroomId(classroomFirst)
-                .lessonDescription("Description")
-                .lessonStart(lessonStart)
-                .lessonEnd(lessonEnd)
-                .build();
+        Schedule expextedSchedule = TestObjectFactory.createExpectedSchedule(lessonStart, lessonEnd);
 
         Schedule foundSchedule = scheduleService.findById(1L);
 
@@ -212,42 +137,11 @@ class ScheduleServiceImplTestIT {
     @Test
     @Sql(scripts = "classpath:db/reset_schedule.sql")
     void saveShouldSaveScheduleToDatabase() {
-        Teacher teacherAlex = Teacher.builder()
-                .userId(1L)
-                .firstName("Alex")
-                .lastName("Kaplan")
-                .email("first@mail.com")
-                .password("passwd")
-                .department("Math Department")
-                .build();
-
-        Course courseBiology = Course.builder()
-                .courseId(2L)
-                .courseName("Biology")
-                .courseDescription("Hard")
-                .build();
-
-        Group groupA5 = Group.builder()
-                .groupId(1L)
-                .groupName("A5").build();
-
-        Classroom classroomFirst = Classroom.builder()
-                .classroomId(1L)
-                .build();
 
         LocalDateTime lessonStart = LocalDate.now().atStartOfDay().plusHours(10);
         LocalDateTime lessonEnd = LocalDate.now().atStartOfDay().plusHours(10).plusMinutes(50);
 
-        Schedule expectedSchedule = Schedule.builder()
-                .scheduleId(1L)
-                .teacher(teacherAlex)
-                .group(groupA5)
-                .course(courseBiology)
-                .classroomId(classroomFirst)
-                .lessonDescription("Description")
-                .lessonStart(lessonStart)
-                .lessonEnd(lessonEnd)
-                .build();
+        Schedule expectedSchedule = TestObjectFactory.createExpectedSchedule(lessonStart, lessonEnd);
 
         ScheduleDTO scheduleDTO = new ScheduleDTO();
         scheduleDTO.setTeacher(1L);
@@ -276,14 +170,7 @@ class ScheduleServiceImplTestIT {
     @Test
     void findFreeTimeForTeacherAndGroupShouldReturnAvailableSlots() {
 
-        Teacher teacherAlex = Teacher.builder()
-                .userId(1L)
-                .firstName("Alex")
-                .lastName("Kaplan")
-                .email("first@mail.com")
-                .password("passwd")
-                .department("Math Department")
-                .build();
+        Teacher teacherAlex = TestObjectFactory.createTeacherAlex();
 
         Group groupA5 = Group.builder()
                 .groupId(1L)
