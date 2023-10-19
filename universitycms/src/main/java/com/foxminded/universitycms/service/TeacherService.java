@@ -10,6 +10,4 @@ public interface TeacherService {
     List<Course> findAllCoursesRelatedToTeacher(String email);
 
     Teacher findByEmail(String email);
-
-    void saveAll(List<Teacher> teachers);
 }

@@ -29,9 +29,4 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherRepository.findByEmail(email).orElseThrow(() ->
                 new DatabaseRuntimeException("Can't find teacher by email: " + email));
     }
-
-    @Override
-    public void saveAll(List<Teacher> teachers) {
-        teacherRepository.saveAll(teachers);
-    }
 }
