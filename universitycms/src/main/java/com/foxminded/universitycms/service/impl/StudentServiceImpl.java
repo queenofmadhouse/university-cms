@@ -20,9 +20,4 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.findByEmail(email).orElseThrow(() ->
                 new DatabaseRuntimeException("Can't find student by id: " + email));
     }
-
-    @Override
-    public void saveAll(List<Student> students) {
-        studentRepository.saveAll(students);
-    }
 }
