@@ -56,11 +56,6 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public void saveAll(List<Schedule> schedules) {
-        scheduleRepository.saveAll(schedules);
-    }
-
-    @Override
     public Map<LocalDate, List<Schedule>> findScheduleByTeacher(String teacherEmail, int days) {
 
         Teacher teacher = teacherService.findByEmail(teacherEmail);
@@ -75,9 +70,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public Map<LocalDate, List<Schedule>> findScheduleByStudent(String studentId, int days) {
+    public Map<LocalDate, List<Schedule>> findScheduleByStudent(String studentEmail, int days) {
 
-        Group group = studentService.findByEmail(studentId).getGroup();
+        Group group = studentService.findByEmail(studentEmail).getGroup();
         LocalDate today = LocalDate.now();
         LocalDateTime startDate = today.atStartOfDay();
         LocalDateTime endDate = today.plusDays(days).atTime(END_OF_DAY);

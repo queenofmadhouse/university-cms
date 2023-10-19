@@ -23,6 +23,4 @@ public interface ScheduleService {
     List<LocalTime> findFreeTimeForTeacherAndGroup(LocalDate date, Teacher teacher, Group group);
 
     void save(ScheduleDTO scheduleDTO);
-
-    void saveAll(List<Schedule> schedules);
 }

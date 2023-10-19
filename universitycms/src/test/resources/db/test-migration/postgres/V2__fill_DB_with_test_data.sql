@@ -29,10 +29,10 @@ INSERT INTO university.students (user_id, group_id)
 VALUES (2, 1);
 
 INSERT INTO university.schedule (id, user_id, course_id, group_id, lesson_start, lesson_end, lesson_description, classroom_id)
-VALUES (1, 1, 2, 1, CURRENT_TIMESTAMP, DATEADD('HOUR', 1, CURRENT_TIMESTAMP), 'Description', 1);
+VALUES (1, 1, 2, 1, NOW()::DATE + interval '0 days' + '08:00:00'::interval, NOW()::DATE + interval '0 days' + '08:50:00'::interval, 'Description', 1);
 
 INSERT INTO university.schedule (id, user_id, course_id, group_id, lesson_start, lesson_end, lesson_description, classroom_id)
-VALUES (2, 1, 2, 1, DATEADD('DAY', 5, CURRENT_TIMESTAMP), DATEADD('HOUR', 1, DATEADD('DAY', 5, CURRENT_TIMESTAMP)), 'Description', 2);
+VALUES (2, 1, 2, 1, NOW()::DATE + interval '5 days' + '08:00:00'::interval, NOW()::DATE + interval '5 days' + '08:50:00'::interval, 'Description', 2);
 
 INSERT INTO university.teachers_courses_relation (user_id, course_id)
 VALUES (1, 1);
