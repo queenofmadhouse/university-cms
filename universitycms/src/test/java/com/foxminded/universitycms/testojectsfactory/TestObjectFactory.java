@@ -61,6 +61,14 @@ public class TestObjectFactory {
                 .build();
     }
 
+    public static Course createNotExistCourse() {
+        return Course.builder()
+                .courseId(100000L)
+                .courseName("Not Exist")
+                .courseDescription("Not Exist")
+                .build();
+    }
+
     public static Group createGroupA5() {
         return Group.builder()
                 .groupId(1L)
