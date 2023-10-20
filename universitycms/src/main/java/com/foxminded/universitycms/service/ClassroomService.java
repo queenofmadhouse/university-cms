@@ -8,8 +8,4 @@ import java.util.List;
 public interface ClassroomService {
 
     List<Classroom> findFreeClassrooms(LocalDateTime timeSlotStart);
-
-    void saveAll(List<Classroom> classrooms);
-
-    List<Classroom> findAll();
 }

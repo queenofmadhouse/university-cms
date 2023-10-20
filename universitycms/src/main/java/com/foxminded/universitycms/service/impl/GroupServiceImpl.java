@@ -22,18 +22,8 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<Group> findAll() {
-        return groupRepository.findAll();
-    }
-
-    @Override
     public Group findById(long id) {
         return groupRepository.findById(id).orElseThrow(() ->
                 new DatabaseRuntimeException("Can't find group by id: " + id));
-    }
-
-    @Override
-    public void saveAll(List<Group> groups) {
-        groupRepository.saveAll(groups);
     }
 }

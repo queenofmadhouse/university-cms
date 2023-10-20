@@ -24,14 +24,4 @@ public class ClassroomServiceImpl implements ClassroomService {
         LocalDateTime timeSlotEnd = timeSlotStart.plusMinutes(lessonDuration);
         return classroomRepository.findFreeClassrooms(timeSlotStart, timeSlotEnd);
     }
-
-    @Override
-    public void saveAll(List<Classroom> classrooms) {
-        classroomRepository.saveAll(classrooms);
-    }
-
-    @Override
-    public List<Classroom> findAll() {
-        return classroomRepository.findAll();
-    }
 }
