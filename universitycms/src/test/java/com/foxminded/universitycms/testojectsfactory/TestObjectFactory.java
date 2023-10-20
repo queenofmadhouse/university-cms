@@ -75,6 +75,20 @@ public class TestObjectFactory {
                 .groupName("A5").build();
     }
 
+    public static Group createGroupB3() {
+        return Group.builder()
+                .groupId(2L)
+                .groupName("B3")
+                .build();
+    }
+
+    public static Group createNotExistGroup() {
+        return Group.builder()
+                .groupId(100000L)
+                .groupName("Not Exist")
+                .build();
+    }
+
     public static Classroom createFirstClassroom() {
         return Classroom.builder()
                 .classroomId(1L)
