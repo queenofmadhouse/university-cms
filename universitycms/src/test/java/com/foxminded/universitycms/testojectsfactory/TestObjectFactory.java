@@ -53,6 +53,14 @@ public class TestObjectFactory {
                 .build();
     }
 
+    public static Course createCourseMath() {
+        return Course.builder()
+                .courseId(1L)
+                .courseName("Math")
+                .courseDescription("Hard")
+                .build();
+    }
+
     public static Group createGroupA5() {
         return Group.builder()
                 .groupId(1L)
