@@ -22,13 +22,13 @@ public class ProfileController {
 
     @PreAuthorize("hasRole('ROLE_STUDENT') or hasRole('ROLE_TEACHER')")
     @GetMapping("/profile")
-    public String getStudentSchedule(Model model, Principal principal) {
+    public String getProfileInfo(Model model, Principal principal) {
 
         User user = userService.findByEmail(principal.getName());
 
         if (user instanceof Student) {
             model.addAttribute("profile", (Student) user);
-        } else if (user instanceof Teacher) {
+        } else {
             model.addAttribute("profile", (Teacher) user);
         }
 
