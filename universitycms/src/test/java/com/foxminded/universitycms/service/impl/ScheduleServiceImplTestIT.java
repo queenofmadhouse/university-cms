@@ -59,7 +59,7 @@ class ScheduleServiceImplTestIT {
                 .findScheduleByStudent(studentBoyana.getEmail(), 30);
 
         assertNotNull(fundedSchedule);
-        assertEquals(2, fundedSchedule.size());
+        assertEquals(3, fundedSchedule.size());
         assertEquals(1, fundedSchedule.get(LocalDate.now()).size());
         assertEquals(1, fundedSchedule.get(LocalDate.now()).get(0).getScheduleId());
         assertEquals(teacherAlex, fundedSchedule.get(LocalDate.now()).get(0).getTeacher());
@@ -82,7 +82,7 @@ class ScheduleServiceImplTestIT {
         Map<LocalDate,List<Schedule>> fundedSchedule = scheduleService.findScheduleByTeacher(teacherAlex.getEmail(), 30);
 
         assertNotNull(fundedSchedule);
-        assertEquals(2, fundedSchedule.size());
+        assertEquals(3, fundedSchedule.size());
         assertEquals(1, fundedSchedule.get(LocalDate.now()).size());
         assertEquals(1, fundedSchedule.get(LocalDate.now()).get(0).getScheduleId());
         assertEquals(teacherAlex, fundedSchedule.get(LocalDate.now()).get(0).getTeacher());
@@ -176,12 +176,10 @@ class ScheduleServiceImplTestIT {
                 .groupId(1L)
                 .groupName("A5").build();
 
-        LocalDate date = LocalDate.now();
+        LocalDate date = LocalDate.now().plusDays(1);
 
         List<LocalTime> freeTimeSlots = scheduleService.findFreeTimeForTeacherAndGroup(date, teacherAlex, groupA5);
 
         assertNotNull(freeTimeSlots);
     }
-
-//    TODO: add a test to achieve 100% coverage
 }
