@@ -50,7 +50,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public void save(ScheduleDTO scheduleDTO) {
 
-        Schedule schedule = scheduleConverter.convert(scheduleDTO);
+        Schedule schedule = scheduleConverter.convertFromDTOtoEntity(scheduleDTO);
 
         scheduleRepository.save(schedule);
     }

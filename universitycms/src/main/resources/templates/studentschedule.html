@@ -2,36 +2,99 @@
 <head>
     <meta charset="UTF-8">
     <title>Student Schedule</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" />
+
+    <!-- FullCalendar CSS -->
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.x/main.min.css' rel='stylesheet' />
+
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                fixedWeekCount: false,
+                events: '/api/studentScheduleEvents'
+            });
+            calendar.render();
+        });
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script th:src="@{/webjars/bootstrap/5.3.2/js/bootstrap.min.js}"></script>
+
+    <!--    Project CSS-->
     <link rel="stylesheet" th:href="@{/css/schedule.css}" type="text/css">
 </head>
 <body>
 
-<h2>Your schedule for 30 days</h2>
-<table>
-    <tr th:each="week : ${weeks}">
-        <td th:each="day : ${week}" class="table-cell">
-            <span class="date"
-                  th:text="${day.getDate.getDayOfMonth()} + ' ' + ${day.getDate.getMonth().toString().toLowerCase()}"></span>
-            <div th:each="lesson : ${day.getLessons}" th:if="${lesson != null}" class="lesson">
-                <span class="course-name" onclick="showLessonDetails(this)" style="cursor:pointer"
-                      th:data-id="${lesson.getScheduleId()}" th:text="${lesson.getCourse().getCourseName}"></span>
-                <span class="lesson-time" th:text="${#temporals.format(lesson.lessonStart, 'HH:mm')} + ' - ' + ${#temporals.format(lesson.lessonEnd, 'HH:mm')}"></span>
+<header>
+    <div class="header">
+        <div class="container">
+            <div class="navbar-wrapper">
+                <h1>Your schedule</h1>
             </div>
-        </td>
-    </tr>
-</table>
-
-<div id="lessonDetails" class="modal">
-    <div class="modal-content">
-        <span class="close" id="closeLessonDetails">&times;</span>
-        <h2 id="lessonName"></h2>
-        <p id="teacherName"></p>
-        <p id="startTime"></p>
-        <p id="endTime"></p>
-        <p id="description"></p>
+        </div>
     </div>
-</div>
+</header>
 
+<main>
+    <div class="schedule">
+        <div class="container">
+            <div class="main-schedule-wrapper">
+                <div class="calendar">
+                    <div id='calendar'></div>
+                </div>
+                <div id="lessonDetails" class="modal">
+                    <div class="modal-content">
+                        <span class="close" id="closeLessonDetails">&times;</span>
+                        <h2 id="lessonName"></h2>
+                        <p id="teacherName"></p>
+                        <p id="startTime"></p>
+                        <p id="endTime"></p>
+                        <p id="description"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer-wrapper">
+            <div class="footer-info">
+                <p>This is an academic project and serves as a demonstration of a University Content Management System (CMS).</p>
+                <p>It is not intended for actual use in educational institutions.</p>
+                <p>Designed and developed by Evgenia Chendeva. Connect with me on <a href="https://www.linkedin.com/in/evgenia-chendeva/" target="_blank">LinkedIn</a> and view more of my work on <a href="https://github.com/queenofmadhouse" target="_blank">GitHub</a>.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            fixedWeekCount: false,
+            events: '/api/studentScheduleEvents',
+            eventClick: function(info) {
+
+                showLessonDetails(info.event.id);
+            },
+            eventTimeFormat: {
+                hour: '2-digit',
+                minute: '2-digit',
+                meridiem: false
+            }
+        });
+        calendar.render();
+    });
+</script>
 
 <script>
     let lessonDetails = document.getElementById('lessonDetails');
@@ -40,11 +103,20 @@
     closeLessonDetailsButton.addEventListener('click', function() {
         lessonDetails.style.display = 'none';
     });
-</script>
 
-<script>
-    function showLessonDetails(element) {
-        let lessonId = element.getAttribute('data-id');
+    function formatEventTime(dateTimeString) {
+        var date = new Date(dateTimeString);
+        var timeOptions = { hour: '2-digit', minute: '2-digit', hour12: false };
+
+        var time = date.toLocaleTimeString('en-US', timeOptions);
+        var day = date.getDate();
+        var month = date.toLocaleString('en-US', { month: 'long' });
+        var year = date.getFullYear();
+
+        return `${time} ${day}-th ${month} ${year}`;
+    }
+
+    function showLessonDetails(lessonId) {
         console.log('Lesson ID:', lessonId);
         fetch(`/lesson/${lessonId}`)
             .then(response => {
@@ -55,18 +127,16 @@
             })
             .then(lesson => {
                 console.log('Lesson:', lesson);
-                document.getElementById('lessonName').textContent = lesson.course.courseName;
-                document.getElementById('teacherName').textContent = "Teacher: " + lesson.teacher.firstName + " " + lesson.teacher.lastName;
-                document.getElementById('startTime').textContent = "Lesson starts at: " + lesson.lessonStart;
-                document.getElementById('endTime').textContent = "Lesson ends at: " + lesson.lessonEnd;
+                document.getElementById('lessonName').textContent = lesson.lessonName;
+                document.getElementById('startTime').textContent = "Lesson starts at: " + formatEventTime(lesson.lessonStart);
+                document.getElementById('endTime').textContent = "Lesson ends at: " + formatEventTime(lesson.lessonEnd);
                 document.getElementById('description').textContent = "Description: " + lesson.lessonDescription;
-                document.getElementById('lessonDetails').style.display = 'block';
+                lessonDetails.style.display = 'block';
             })
             .catch(error => {
                 console.error('Error:', error);
             });
     }
 </script>
-
 </body>
 </html>

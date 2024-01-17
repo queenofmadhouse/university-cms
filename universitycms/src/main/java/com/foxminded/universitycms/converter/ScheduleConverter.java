@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ScheduleConverter {
 
-    public Schedule convert(ScheduleDTO scheduleDTO) {
+    public Schedule convertFromDTOtoEntity(ScheduleDTO scheduleDTO) {
         return Schedule.builder()
                 .teacher(Teacher.builder().userId(scheduleDTO.getTeacher()).build())
                 .course(Course.builder().courseId(scheduleDTO.getCourse()).build())
@@ -22,6 +22,20 @@ public class ScheduleConverter {
                 .lessonStart(scheduleDTO.getLessonStart())
                 .lessonEnd(scheduleDTO.getLessonEnd())
                 .lessonDescription(scheduleDTO.getLessonDescription())
+                .build();
+    }
+
+    public ScheduleDTO convertFromEntityToDTO(Schedule schedule) {
+        return ScheduleDTO.builder()
+                .scheduleId(schedule.getScheduleId())
+                .teacher(schedule.getScheduleId())
+                .course(schedule.getCourse().getCourseId())
+                .lessonName(schedule.getCourse().getCourseName())
+                .group(schedule.getGroup().getGroupId())
+                .classroom(schedule.getClassroomId().getClassroomId())
+                .lessonStart(schedule.getLessonStart())
+                .lessonEnd(schedule.getLessonEnd())
+                .lessonDescription(schedule.getLessonDescription())
                 .build();
     }
 }

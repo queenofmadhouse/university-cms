@@ -1,5 +1,6 @@
 package com.foxminded.universitycms.service.impl;
 
+import com.foxminded.universitycms.entity.Admin;
 import com.foxminded.universitycms.entity.Student;
 import com.foxminded.universitycms.entity.Teacher;
 import com.foxminded.universitycms.entity.User;
@@ -41,6 +42,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         if(user instanceof Student) {
             roles.add(new SimpleGrantedAuthority("ROLE_STUDENT"));
             log.info("Student login");
+        }
+        if(user instanceof Admin) {
+            roles.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            log.info("Admin login");
         }
 
         log.info("User have roles: " + roles.stream().toString());

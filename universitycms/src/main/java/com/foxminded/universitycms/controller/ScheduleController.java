@@ -1,8 +1,8 @@
 package com.foxminded.universitycms.controller;
 
+import com.foxminded.universitycms.converter.ScheduleConverter;
 import com.foxminded.universitycms.entity.Classroom;
 import com.foxminded.universitycms.entity.Course;
-import com.foxminded.universitycms.entity.Day;
 import com.foxminded.universitycms.entity.Group;
 import com.foxminded.universitycms.entity.Schedule;
 import com.foxminded.universitycms.entity.Teacher;
@@ -14,11 +14,9 @@ import com.foxminded.universitycms.service.CourseService;
 import com.foxminded.universitycms.service.GroupService;
 import com.foxminded.universitycms.service.ScheduleService;
 import com.foxminded.universitycms.service.TeacherService;
-import com.foxminded.universitycms.service.impl.CalendarService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -36,7 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -51,45 +49,86 @@ public class ScheduleController {
     private final GroupService groupService;
     private final CourseService courseService;
     private final ClassroomService classroomService;
-    private final CalendarService calendarService;
+    private final ScheduleConverter scheduleConverter;
     @Value("${app.constants.calendar.amount-of-days}")
     private int amountOfDaysInMonth;
+
+    @PreAuthorize("hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER')")
+    @GetMapping("/lesson/{lessonId}")
+    @ResponseBody
+    public ResponseEntity<ScheduleDTO> getLessonDetails(@PathVariable long lessonId) {
+        Schedule foundLesson = scheduleService.findById(lessonId);
+
+        ScheduleDTO lessonDetailsDTO = scheduleConverter.convertFromEntityToDTO(foundLesson);
+
+        return ResponseEntity.ok(lessonDetailsDTO);
+    }
 
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     @GetMapping("/studentschedule")
     public String getStudentSchedule(Model model) {
 
+        log.info("getStudentSchedule works");
+
+        return "studentschedule";
+    }
+
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    @GetMapping("/api/studentScheduleEvents")
+    @ResponseBody
+    public ResponseEntity<List<Map<String, Object>>> getStudentScheduleEvents() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String studentEmail = authentication.getName();
 
-        log.info("Trying to get schedule for student with email: " + studentEmail);
+        Map<LocalDate, List<Schedule>> schedules = scheduleService.findScheduleByStudent(studentEmail, amountOfDaysInMonth);
 
-        Map<LocalDate, List<Schedule>> schedules = scheduleService.findScheduleByStudent(studentEmail,
-                amountOfDaysInMonth);
-        List<List<Day>> weeks = calendarService.prepareCalendar(schedules);
-        List<LocalDate> month = calendarService.prepareDates(30);
-        model.addAttribute("month", month);
-        model.addAttribute("weeks", weeks);
-        return "studentschedule";
+        List<Map<String, Object>> events = schedules.values().stream()
+                .flatMap(List::stream)
+                .map(schedule -> {
+                    Map<String, Object> event = new HashMap<>();
+                    event.put("id", schedule.getScheduleId());
+                    event.put("title", schedule.getCourse().getCourseName());
+                    event.put("start", schedule.getLessonStart());
+                    event.put("end", schedule.getLessonEnd());
+                    return event;
+                })
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(events);
     }
 
     @PreAuthorize("hasRole('ROLE_TEACHER')")
     @GetMapping("/teacherschedule")
     public String getTeacherSchedule(Model model) {
 
+        log.info("getTeacherSchedule works");
+
+        return "teacherschedule";
+    }
+
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
+    @GetMapping("/api/teacherScheduleEvents")
+    @ResponseBody
+    public ResponseEntity<List<Map<String, Object>>> getTeacherScheduleEvents() {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String teacherEmail = authentication.getName();
 
-        log.info("Trying to get schedule for teacher with email: {}", teacherEmail);
+        Map<LocalDate, List<Schedule>> schedules = scheduleService.findScheduleByTeacher(teacherEmail, amountOfDaysInMonth);
 
-        List<Course> courses = new ArrayList<>(teacherService.findAllCoursesRelatedToTeacher(teacherEmail));
+        List<Map<String, Object>> events = schedules.values().stream()
+                .flatMap(List::stream)
+                .map(schedule -> {
+                    Map<String, Object> event = new HashMap<>();
+                    event.put("id", schedule.getScheduleId());
+                    event.put("title", schedule.getCourse().getCourseName());
+                    event.put("start", schedule.getLessonStart());
+                    event.put("end", schedule.getLessonEnd());
+                    return event;
+                })
+                .collect(Collectors.toList());
 
-        Map<LocalDate, List<Schedule>> schedules = scheduleService.findScheduleByTeacher(teacherEmail,
-                amountOfDaysInMonth);
-        List<List<Day>> weeks = calendarService.prepareCalendar(schedules);
-        model.addAttribute("courses", courses);
-        model.addAttribute("weeks", weeks);
-        return "teacherschedule";
+        return ResponseEntity.ok(events);
     }
 
     @PreAuthorize("hasRole('ROLE_TEACHER')")
@@ -141,16 +180,6 @@ public class ScheduleController {
         return foundFreeClassrooms.stream()
                 .map(classroom -> new ClassroomDTO(classroom.getClassroomId()))
                 .collect(Collectors.toList());
-    }
-
-    @PreAuthorize("hasRole('ROLE_TEACHER')")
-    @ResponseBody
-    @GetMapping("/lesson/{scheduleId}")
-    public Schedule getLesson(@PathVariable long scheduleId) {
-
-        log.info("Trying to find lesson by id: {}", scheduleId);
-
-        return scheduleService.findById(scheduleId);
     }
 
     @PreAuthorize("hasRole('ROLE_TEACHER')")

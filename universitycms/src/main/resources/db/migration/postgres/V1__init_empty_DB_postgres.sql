@@ -30,6 +30,13 @@ CREATE TABLE university.teachers
     FOREIGN KEY (user_id) REFERENCES university.users (user_id)
 );
 
+CREATE TABLE university.admins
+(
+    user_id INTEGER PRIMARY KEY,
+    department VARCHAR(255),
+    FOREIGN KEY (user_id) REFERENCES university.users (user_id)
+);
+
 CREATE TABLE university.courses
 (
     course_id          SERIAL PRIMARY KEY,
@@ -74,4 +81,7 @@ CREATE TABLE university.schedule
     FOREIGN KEY (course_id) REFERENCES university.courses (course_id),
     FOREIGN KEY (group_id) REFERENCES university.groups (group_id),
     FOREIGN KEY (classroom_id) references university.classrooms (classroom_id)
+);
+CREATE TABLE admins
+(
 );

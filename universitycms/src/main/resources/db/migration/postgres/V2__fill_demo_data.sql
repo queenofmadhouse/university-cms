@@ -75,8 +75,7 @@ INSERT INTO university.users (user_id, first_name, last_name, email, password) V
 INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (8, 'Jennifer', 'Barton', 'christopher.robel@gmail.com', '$2a$10$lFN4RnqTVH7pwx/LsFNxTusvYFc9bm7TBbNv.0zsFd.7yRXNqT2Hi');
 INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (9, 'Royce', 'Bradtke', 'keegan.schuster@gmail.com', '$2a$10$SWAfbb.ioTVQ1/eEZD4Et.zCz.XzDK3l.5t21gyu/EYXWdHnjQ5fy');
 INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (10, 'Elena', 'Dietrich', 'oren.bruen@gmail.com', '$2a$10$pjfrJovXusl0XtuLYQdzV.O3h1VodsX9nhEShNGy5aI2T9paYcllm');
-
-
+INSERT INTO university.users (user_id, first_name, last_name, email, password) VALUES (11, 'Admin', 'Admin', 'admin@gmail.com', '$2a$10$FCzzTvgZLJYfgSneWsRWguhsIv8bUdvLZI2ZaT07/PXLiSqHfPhJK');
 
 -- Students
 
@@ -95,6 +94,9 @@ INSERT INTO university.teachers (user_id, department) VALUES (3, 'FpHD');
 INSERT INTO university.teachers (user_id, department) VALUES (4, 'FpHD');
 INSERT INTO university.teachers (user_id, department) VALUES (5, 'FpHD');
 
+-- Admins
+
+INSERT INTO university.admins (user_id, department) VALUES (11, 'Administration Department');
 
 -- Teacher courses relation
 
